@@ -13,7 +13,9 @@ from PySide2.QtGui import QScreen
 
 # Validator's regex variables
 emailValidatorReg = r"^\S+@\S+\.\S+$"
-nameValidatorReg = r"^[a-zA-ZäöüÄÖÜß]{3,}([',. -][a-zA-ZäöüÄÖÜß ]{2,})?([a-zA-ZäöüÄÖÜß]*|[',. -][a-zA-ZäöüÄÖÜß ]{2,})*$"
+nameValidatorReg = r"^[a-zA-ZäöüÄÖÜß]{3}(?:[a-zA-ZäöüÄÖÜß]*)(?:[,.-]?[a-zA-ZäöüÄÖÜß ]{2,})?$"
+trainingNameValidReg = r"^[a-zA-ZäöüÄÖÜß0-9]{3}(?:[a-zA-ZäöüÄÖÜß0-9]*)(?:[,.-]?[a-zA-ZäöüÄÖÜß0-9 ]{2,})?$"
+onlyNumValidation = r"^[0-9]{1,2}$"
 
 # DB Connection
 def connect_to_db():
@@ -65,18 +67,9 @@ class MainWindow(QMainWindow):
         else:
             print("Failed to connect to the database")
 
-    # Unified Field Update validation
-    def updateFieldValidationFeedback(self, inputField):
-        self.checkAllValidations()
-        if  inputField.hasAcceptableInput():
-                
-                 inputField.setStyleSheet(self.correct)
-        else:
-                # Input is invalid: Apply a style for invalid input, e.g., border color red
-                 inputField.setStyleSheet(self.incorrect)
 
 
-    # New employee button activation
+    # New employee button activation---------------------
     def checkAllValidations(self):
         # Assume all fields have validators and use hasAcceptableInput to check validity
         isValid = (
@@ -87,7 +80,41 @@ class MainWindow(QMainWindow):
         )
         
         self.ui.bStoreNewEmployee.setEnabled(isValid)  # Enable/disable based on validity
-    
+
+    # Unified Field Update validation new employee
+    def updateFieldValidationFeedback(self, inputField):
+        self.checkAllValidations()
+        if  inputField.hasAcceptableInput():
+            inputField.setStyleSheet(self.correct)
+        else:
+            # Input is invalid: Apply a style for invalid input, e.g., border color red
+            inputField.setStyleSheet(self.incorrect)
+
+
+
+    # New training button activation---------------------
+    def checkAllValidationsT(self):
+        # Assume all fields have validators and use hasAcceptableInput to check validity
+        isValid = (
+            self.ui.newTrainingName.hasAcceptableInput() and self.ui.newTrainingName.text().strip() != "" and
+            self.ui.newTrainingDuration.hasAcceptableInput() and self.ui.newTrainingDuration.text().strip() != ""
+        )
+
+        self.ui.bNewTrainingStore.setEnabled(isValid)  # Enable/disable based on validity
+
+
+    # Unified Feild Update Validation Training
+    def updateFieldValidationFeedbackT(self, inputField):
+        self.checkAllValidationsT()
+        if  inputField.hasAcceptableInput():
+            inputField.setStyleSheet(self.correct)
+        else:
+            # Input is invalid: Apply a style for invalid input, e.g., border color red
+            inputField.setStyleSheet(self.incorrect)
+
+
+
+
     # # Update employee in DB
     # def updateEmployeeData(self):
     #     employee_id = self.ui.comboBoxEditEmployee.currentData()
@@ -125,7 +152,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("qt-design\logo.png"))
         self.setWindowTitle("Junghans Shulung Datenbank")
 
-
+       
         self.employee_id = None  # Initialize employee_id
 
         # Initial check to set the correct state of the button when the app starts
@@ -149,12 +176,26 @@ class MainWindow(QMainWindow):
         mainValidator(self.ui.newEmployeePosition, nameValidatorReg)
         #---------------------------------
         
+
+
+
+        # New training tab validation
+        #=---------------------------
+        self.checkAllValidationsT()
+        # Name
+        self.ui.newTrainingName.textChanged.connect(lambda: self.updateFieldValidationFeedbackT(self.ui.newTrainingName))
+        mainValidator(self.ui.newTrainingName, trainingNameValidReg)
+        self.ui.newTrainingDuration.textChanged.connect(lambda: self.updateFieldValidationFeedbackT(self.ui.newTrainingDuration))
+        mainValidator(self.ui.newTrainingDuration, onlyNumValidation)
+        #----------------------------
         
         #submit new employee to store
         self.ui.bStoreNewEmployee.clicked.connect(self.StoringNewEmployee)
         
         # Populate the comboBoxEditEmployee
-        self.populateComboBox()
+        self.populateComboBox(
+           
+        )
 
         self.ui.bEditEmployee.clicked.connect(self.populateEmployeeFields)
 
@@ -186,11 +227,11 @@ class MainWindow(QMainWindow):
         hairingDate = self.ui.dateEditNeuenMitarbeiter.date().toPython()
         
         
-        self.insertDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
+        self.insertNewEmployeeDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
         #self.populateComboBox()
     
     # Store new employee or edit employee in DB
-    def insertDataIntoDatabase(self,  Employeename, lastname, email, position, hairingDate):
+    def insertNewEmployeeDataIntoDatabase(self,  Employeename, lastname, email, position, hairingDate):
         conn = connect_to_db()
         if self.employee_id is not None:
             if conn is not None:
@@ -251,6 +292,8 @@ def adjust_label_font_size(widget, font_size):
     for child in widget.findChildren(QLabel):
         child.setFont(font)
 
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)  # Pass sys.argv
     screen = app.primaryScreen()
@@ -262,7 +305,7 @@ if __name__ == '__main__':
     adjust_label_font_size(mainWindow, new_font_size)  # Adjust labels
     adjust_tab_font_size(mainWindow.ui.tabWidget, new_font_size)
 
-
+    
 
     global_font = QFont("Century Gothic", 10)
     app.setFont(global_font)

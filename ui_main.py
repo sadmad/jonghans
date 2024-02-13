@@ -64,9 +64,7 @@ class Ui_MainWindow(object):
         self.frameMain = QFrame(self.haupt)
         self.frameMain.setObjectName(u"frameMain")
         self.frameMain.setGeometry(QRect(0, 0, 651, 601))
-        self.frameMain.setStyleSheet(u"background-color:  #DFF1FA;\n"
-"\n"
-"")
+        self.frameMain.setStyleSheet(u"background-color:  #DFF1FA;\n""\n""")
         self.frameMain.setFrameShape(QFrame.StyledPanel)
         self.frameMain.setFrameShadow(QFrame.Raised)
         self.label_38 = QLabel(self.frameMain)
@@ -81,14 +79,11 @@ class Ui_MainWindow(object):
         self.bSearchEmployeeCertificate = QPushButton(self.frameSearchEmp)
         self.bSearchEmployeeCertificate.setObjectName(u"bSearchEmployeeCertificate")
         self.bSearchEmployeeCertificate.setGeometry(QRect(330, 50, 151, 41))
-        self.bSearchEmployeeCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bSearchEmployeeCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.label_52 = QLabel(self.frameSearchEmp)
         self.label_52.setObjectName(u"label_52")
         self.label_52.setGeometry(QRect(10, 20, 251, 20))
-        self.label_52.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-
-"background-color: #DFF1FA")
+        self.label_52.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.comboBoxEmployeeMain = QComboBox(self.frameSearchEmp)
         self.comboBoxEmployeeMain.setObjectName(u"comboBoxEmployeeMain")
         self.comboBoxEmployeeMain.setGeometry(QRect(30, 60, 221, 31))
@@ -104,13 +99,11 @@ class Ui_MainWindow(object):
         self.bSearchExCertificateByDate = QPushButton(self.frameSearchExCertificate)
         self.bSearchExCertificateByDate.setObjectName(u"bSearchExCertificateByDate")
         self.bSearchExCertificateByDate.setGeometry(QRect(330, 50, 151, 41))
-        self.bSearchExCertificateByDate.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bSearchExCertificateByDate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.label_58 = QLabel(self.frameSearchExCertificate)
         self.label_58.setObjectName(u"label_58")
         self.label_58.setGeometry(QRect(10, 10, 441, 20))
-        self.label_58.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-"background-color: #DFF1FA")
+        self.label_58.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.dateExpireCertificateSearch = QDateEdit(self.frameSearchExCertificate)
         self.dateExpireCertificateSearch.setObjectName(u"dateExpireCertificateSearch")
         self.dateExpireCertificateSearch.setGeometry(QRect(20, 60, 231, 31))
@@ -122,13 +115,11 @@ class Ui_MainWindow(object):
         self.label = QLabel(self.add_new_certificate)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(40, 45, 71, 21))
-        self.label.setStyleSheet(
-"color: rgb(34, 51, 59);")
+        self.label.setStyleSheet("color: rgb(34, 51, 59);")
         self.label_2 = QLabel(self.add_new_certificate)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(360, 45, 91, 21))
-        self.label_2.setStyleSheet(
-"color: rgb(34, 51, 59);")
+        self.label_2.setStyleSheet("color: rgb(34, 51, 59);")
         self.label_3 = QLabel(self.add_new_certificate)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setGeometry(QRect(360, 135, 71, 21))
@@ -148,32 +139,32 @@ class Ui_MainWindow(object):
         self.newEmployeeName.setObjectName(u"newEmployeeName")
         self.newEmployeeName.setGeometry(QRect(40, 70, 241, 41))
         self.newEmployeeName.setStyleSheet(u"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);\n"
-"\n"
-"background-color: rgb(255, 255, 255);\n"
-"")
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);\n"
+                "\n"
+                "background-color: rgb(255, 255, 255);\n""")
+        
         self.newEmployeeLastname = QLineEdit(self.add_new_certificate)
         self.newEmployeeLastname.setObjectName(u"newEmployeeLastname")
         self.newEmployeeLastname.setGeometry(QRect(360, 70, 241, 41))
         self.newEmployeeLastname.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);")
+                "border-style: solid;\n"
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);")
         self.newEmployeeEmail = QLineEdit(self.add_new_certificate)
         self.newEmployeeEmail.setObjectName(u"newEmployeeEmail")
         self.newEmployeeEmail.setGeometry(QRect(40, 160, 241, 41))
         self.newEmployeeEmail.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);")
+                "border-style: solid;\n"
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);")
         self.newEmployeePosition = QLineEdit(self.add_new_certificate)
         self.newEmployeePosition.setObjectName(u"newEmployeePosition")
         self.newEmployeePosition.setGeometry(QRect(360, 160, 241, 41))
         self.newEmployeePosition.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);")
+                "border-style: solid;\n"
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);")
         #------------------------------------------------------------
 
 
@@ -192,17 +183,15 @@ class Ui_MainWindow(object):
         self.bEditEmployee.setObjectName(u"bEditEmployee")
         self.bEditEmployee.setGeometry(QRect(330, 50, 151, 41))
         self.bEditEmployee.setCursor(Qt.PointingHandCursor)
-        self.bEditEmployee.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bEditEmployee.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.label_8 = QLabel(self.frame_14)
         self.label_8.setObjectName(u"label_8")
         self.label_8.setGeometry(QRect(30, 20, 251, 20))
-        self.label_8.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-"background-color: #DFF1FA")
+        self.label_8.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.comboBoxEditEmployee = QComboBox(self.frame_14)
         self.comboBoxEditEmployee.setObjectName(u"comboBoxEditEmployee")
         self.comboBoxEditEmployee.setGeometry(QRect(40, 60, 251, 31))
-        self.comboBoxEditEmployee.setStyleSheet(u"background-color: rgb(224, 239, 245);")
+        self.comboBoxEditEmployee.setStyleSheet(u"background-color: rgb(224, 239, 245); color: darkblue")
 
         # Store data of new employee 
         self.bStoreNewEmployee = QPushButton(self.frameEmp)
@@ -210,17 +199,14 @@ class Ui_MainWindow(object):
         self.bStoreNewEmployee.setGeometry(QRect(360, 270, 241, 51))
         self.bStoreNewEmployee.setCursor(Qt.PointingHandCursor)
         self.bStoreNewEmployee.setStyleSheet("""
-                QPushButton {
-                
+        QPushButton {
                 /* Styles for enabled state */
                 background-color: rgb(133, 205, 242);
                 color: rgb(255, 255, 255);
                 }
-            QPushButton:disabled {
+        QPushButton:disabled {
                 background-color: #B0D4E8; /* Disabled state */
-                color: #A0A0A0;  /* Darker text for disabled state */
-            }
-""")
+                color: #A0A0A0;  /* Darker text for disabled state */}""")
 
         # New employee hiering date    
         self.dateEditNeuenMitarbeiter = QDateEdit(self.frameEmp, calendarPopup=True)
@@ -243,12 +229,13 @@ class Ui_MainWindow(object):
                                                 
         }
         QCalendarWidget QWidget#qt_calendar_navigationbar QMenu, QCalendarWidget QWidget#qt_calendar_navigationbar QSpinBox {
-                background-color: #152C4A;
-                color: red;
+                background-color: lightblue;
+                color: darkblue;
         }
-        QCalendarWidget { min-width: 280px; color:black} /* Set minimum width for all QCalendarWidgets */ QCalendarWidget QToolButton {
-                background-color: #152C4A;
-                color: black;
+        QCalendarWidget { min-width: 280px; color:black} /* Set minimum width for all QCalendarWidgets */ 
+        QCalendarWidget QToolButton {
+                background-color: lightblue;
+                color: white;
                 font-size: 10pt;
                 icon-size: 16px, 16px; /* Width, Height */
         }                
@@ -271,6 +258,7 @@ class Ui_MainWindow(object):
         self.pushButton_2 = QPushButton(self.add_new_person)
         self.pushButton_2.setObjectName(u"pushButton_2")
         self.pushButton_2.setGeometry(QRect(320, 490, 151, 71))
+
         self.framNewTraining = QFrame(self.add_new_person)
         self.framNewTraining.setObjectName(u"framNewTraining")
         self.framNewTraining.setGeometry(QRect(0, 0, 651, 601))
@@ -281,22 +269,26 @@ class Ui_MainWindow(object):
         self.label_17.setObjectName(u"label_17")
         self.label_17.setGeometry(QRect(350, 40, 91, 21))
         self.label_17.setStyleSheet(u"color: rgb(34, 51, 59);")
+
+        # New training input -name field
         self.newTrainingName = QLineEdit(self.framNewTraining)
         self.newTrainingName.setObjectName(u"newTrainingName")
-        self.newTrainingName.setGeometry(QRect(40, 70, 241, 41))
+        self.newTrainingName.setGeometry(QRect(40, 70, 261, 41))
         self.newTrainingName.setStyleSheet(u"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);\n"
-"\n"
-"background-color: rgb(255, 255, 255);\n"
-"")
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);\n"
+                "\n"
+                "background-color: rgb(255, 255, 255);\n""")
+                
+        # New training duration field
         self.newTrainingDuration = QLineEdit(self.framNewTraining)
+        self.newTrainingDuration.setPlaceholderText("Die Tage, die das Training dauert")
         self.newTrainingDuration.setObjectName(u"newTrainingDuration")
         self.newTrainingDuration.setGeometry(QRect(350, 70, 261, 41))
         self.newTrainingDuration.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);")
+                "border-style: solid;\n"
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);")
         self.label_13 = QLabel(self.framNewTraining)
         self.label_13.setObjectName(u"label_13")
         self.label_13.setGeometry(QRect(40, 40, 71, 21))
@@ -305,18 +297,26 @@ class Ui_MainWindow(object):
         self.label_15.setObjectName(u"label_15")
         self.label_15.setGeometry(QRect(40, 120, 131, 21))
         self.label_15.setStyleSheet(u"color: rgb(34, 51, 59);")
-        self.newTrainingDescruption = QLineEdit(self.framNewTraining)
-        self.newTrainingDescruption.setObjectName(u"newTrainingDescruption")
-        self.newTrainingDescruption.setGeometry(QRect(40, 150, 571, 201))
-        self.newTrainingDescruption.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
-"border-style: solid;\n"
-"border-width: 1px;\n"
-"border-color: rgb(175, 221, 244);")
+
+        # New training Description field
+        self.newTrainingDescription = QLineEdit(self.framNewTraining)
+        self.newTrainingDescription.setObjectName(u"newTrainingDescription")
+        self.newTrainingDescription.setGeometry(QRect(40, 150, 571, 201))
+        self.newTrainingDescription.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+                "border-style: solid;\n"
+                "border-width: 1px;\n"
+                "border-color: rgb(175, 221, 244);")
         self.bNewTrainingStore = QPushButton(self.framNewTraining)
         self.bNewTrainingStore.setObjectName(u"bNewTrainingStore")
         self.bNewTrainingStore.setGeometry(QRect(210, 360, 221, 51))
-        self.bNewTrainingStore.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bNewTrainingStore.setStyleSheet("""QPushButton {
+                /* Styles for enabled state */
+                background-color: rgb(133, 205, 242);
+                color: rgb(255, 255, 255);
+                }
+        QPushButton:disabled {
+                background-color: #B0D4E8; /* Disabled state */
+                color: #A0A0A0;  /* Darker text for disabled state */}""")
         self.frame_15 = QFrame(self.framNewTraining)
         self.frame_15.setObjectName(u"frame_15")
         self.frame_15.setGeometry(QRect(60, 430, 531, 141))
@@ -326,12 +326,12 @@ class Ui_MainWindow(object):
         self.bEditTraining.setObjectName(u"bEditTraining")
         self.bEditTraining.setGeometry(QRect(300, 50, 151, 41))
         self.bEditTraining.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+                "background-color: rgb(133, 205, 242);")
         self.label_9 = QLabel(self.frame_15)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setGeometry(QRect(40, 20, 251, 20))
         self.label_9.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-"background-color: #DFF1FA")
+                "background-color: #DFF1FA")
         self.comboBoxEditTraining = QComboBox(self.frame_15)
         self.comboBoxEditTraining.setObjectName(u"comboBoxEditTraining")
         self.comboBoxEditTraining.setGeometry(QRect(40, 60, 221, 31))
@@ -342,8 +342,7 @@ class Ui_MainWindow(object):
         self.frameCertificate = QFrame(self.add_certificate)
         self.frameCertificate.setObjectName(u"frameCertificate")
         self.frameCertificate.setGeometry(QRect(0, 0, 651, 601))
-        self.frameCertificate.setStyleSheet(u"background-color:  #DFF1FA;\n"
-"")
+        self.frameCertificate.setStyleSheet(u"background-color:  #DFF1FA;\n""")
         self.frameCertificate.setFrameShape(QFrame.StyledPanel)
         self.frameCertificate.setFrameShadow(QFrame.Raised)
         self.comboBoxEmpCertificateTab = QComboBox(self.frameCertificate)
@@ -373,13 +372,11 @@ class Ui_MainWindow(object):
         self.label_57 = QLabel(self.frameCertificate)
         self.label_57.setObjectName(u"label_57")
         self.label_57.setGeometry(QRect(50, 360, 131, 20))
-        self.label_57.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-"background-color: #DFF1FA")
+        self.label_57.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.bCertificateImage = QPushButton(self.frameCertificate)
         self.bCertificateImage.setObjectName(u"bCertificateImage")
         self.bCertificateImage.setGeometry(QRect(350, 350, 151, 41))
-        self.bCertificateImage.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bCertificateImage.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.frame_16 = QFrame(self.frameCertificate)
         self.frame_16.setObjectName(u"frame_16")
         self.frame_16.setGeometry(QRect(50, 420, 531, 141))
@@ -388,13 +385,11 @@ class Ui_MainWindow(object):
         self.bEditCertificate = QPushButton(self.frame_16)
         self.bEditCertificate.setObjectName(u"bEditCertificate")
         self.bEditCertificate.setGeometry(QRect(300, 50, 151, 41))
-        self.bEditCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"background-color: rgb(133, 205, 242);")
+        self.bEditCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.label_34 = QLabel(self.frame_16)
         self.label_34.setObjectName(u"label_34")
         self.label_34.setGeometry(QRect(40, 20, 251, 20))
-        self.label_34.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-"background-color: #DFF1FA")
+        self.label_34.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.comboBoxEditCertificate = QComboBox(self.frame_16)
         self.comboBoxEditCertificate.setObjectName(u"comboBoxEditCertificate")
         self.comboBoxEditCertificate.setGeometry(QRect(40, 60, 221, 31))
@@ -411,9 +406,7 @@ class Ui_MainWindow(object):
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setGeometry(QRect(150, 660, 381, 31))
-        self.textEdit.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"border: 0\n"
-"")
+        self.textEdit.setStyleSheet(u"color: rgb(255, 255, 255);\n""border: 0\n""")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -470,9 +463,9 @@ class Ui_MainWindow(object):
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_certificate), QCoreApplication.translate("MainWindow", u"Zertifikat registrieren", None))
         self.textEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:5.5pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">\u00a9 Junghans Kunststoffwaren-Fabrik GmbH &amp; Co. KG</span></p></body></html>", None))
+                "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:5.5pt; font-weight:400; font-style:normal;\">\n"
+                "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">\u00a9 Junghans Kunststoffwaren-Fabrik GmbH &amp; Co. KG</span></p></body></html>", None))
     # retranslateUi
         
