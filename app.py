@@ -68,7 +68,31 @@ class MainWindow(QMainWindow):
             print("Failed to connect to the database")
 
 
+    # Populate the new Training tab's fields
+    def populateTrainingFields(self):
+        self.schul_id = self.ui.comboBoxEditTraining.currentData()  # Retrieve the stored employee ID
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                # Fetch the data for the selected employee
+                cursor.execute("SELECT s_name, duration, description  FROM schulung WHERE s_id = %s", (self.schul_id,))
+                training_data = cursor.fetchone()
+                if training_data:
+                    s_name, duration, description = training_data
+                    # Populate the input fields with the employee's data
+                    self.ui.newTrainingName.setText(s_name)
+                    self.ui.newTrainingDuration.setText(str(duration))
+                    self.ui.newTrainingDescription.setText(description)
 
+            except Exception as e:
+                print(f"Error fetching employee details: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+            
+        else:
+            print("Failed to connect to the database")
     # New employee button activation---------------------
     def checkAllValidations(self):
         # Assume all fields have validators and use hasAcceptableInput to check validity
@@ -193,14 +217,20 @@ class MainWindow(QMainWindow):
         self.ui.bStoreNewEmployee.clicked.connect(self.StoringNewEmployee)
         
         # Populate the comboBoxEditEmployee
-        self.populateComboBox(
-           
-        )
-
+        self.populateComboBoxEmp()
         self.ui.bEditEmployee.clicked.connect(self.populateEmployeeFields)
 
-    # Retrieve data from DB
-    def populateComboBox(self):
+        # Populate the comboboxTraining
+        self.populateComboBoxTraining()
+        self.ui.bEditTraining.clicked.connect(self.populateTrainingFields)
+
+        # Submit New Training 
+        self.ui.bNewTrainingStore.clicked.connect(self.StoringNewTraining)
+    # End Of INIT-------------------------
+        
+    # New Employee Database Connecetions--------------        
+    # Retrieve data from DB EMPLOYEE TABLE
+    def populateComboBoxEmp(self):
         conn = connect_to_db()
         if conn is not None:
             try:
@@ -270,7 +300,58 @@ class MainWindow(QMainWindow):
             else:
                 print("Failed to connect to the database")
 
+    #------------------------
+                
+    # Retrieve data from DB table training
+    def populateComboBoxTraining(self):
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                cursor.execute("SELECT s_id, s_name FROM schulung")  # Adjust columns as needed
+                for row in cursor.fetchall():
+                    s_id, s_name = row
+                    self.ui.comboBoxEditTraining.addItem(s_name, s_id)
+            except Exception as e:
+                print(f"An error occurred while fetching employees: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            print("Failed to connect to the database")  
+        
+    # Get The Data From the training Tab
+    def StoringNewTraining(self):
+        training = self.ui.newTrainingName.text()
+        duration = self.ui.newTrainingDuration.text()
+        description = self.ui.newTrainingDescription.text()
 
+        self.insertNewTraininDataIntoDatabase(training, duration, description)
+
+    # New Training Database Connections
+    def insertNewTraininDataIntoDatabase(self, training, duration, description):
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                query = """INSERT INTO schulung (s_name, duration, description)VALUES(%s, %s, %s)"""
+                cursor.execute(query, ( training, duration, description))
+                conn.commit()
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                conn.rollback()  # Rollback in case of error
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            print("Failed to connect to the database")
+
+
+    #----------------------------------
+
+
+
+# Change the font size---------------------
 def calculate_tab_font_size(screen_width, screen_height):
     # Example logic for calculating font size based on screen dimensions
     base_width = 1700  # Reference screen width
@@ -291,7 +372,7 @@ def adjust_label_font_size(widget, font_size):
         widget.setFont(font)
     for child in widget.findChildren(QLabel):
         child.setFont(font)
-
+#--------------------------------------------
 
 
 if __name__ == '__main__':
