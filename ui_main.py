@@ -18,8 +18,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(850, 694)
-        MainWindow.setStyleSheet(u"background-color: rgb(34, 51, 59);\n"
-"")
+        MainWindow.setStyleSheet(u"background-color: rgb(34, 51, 59);\n")
        
         self.centralwidget = QWidget()
         self.centralwidget.setObjectName(u"centralwidget")
@@ -48,7 +47,8 @@ class Ui_MainWindow(object):
 "    background-color:  #DFF1FA; /* Replace with your desired color */\n"
 "}\n"
 "\n"
-"")
+"")     
+        
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setGeometry(QRect(10, 10, 651, 641))
@@ -192,6 +192,14 @@ class Ui_MainWindow(object):
         self.comboBoxEditEmployee.setObjectName(u"comboBoxEditEmployee")
         self.comboBoxEditEmployee.setGeometry(QRect(40, 60, 251, 31))
         self.comboBoxEditEmployee.setStyleSheet(u"background-color: rgb(224, 239, 245); color: darkblue")
+        # Meaage box after Update
+        self.updateSuccessMsg = QMessageBox()
+        self.updateSuccessMsg.setStyleSheet("background-color: rgb(224, 239, 245); font: 8pt")
+        self.updateSuccessMsg.setWindowTitle("Erfolgreich")
+        self.updateSuccessMsg.setText("Das Update war erfolgreich")
+        self.updateSuccessMsg.setIcon(QMessageBox.Information)
+        self.updateSuccessMsg.setStandardButtons(QMessageBox.Ok)
+        self.updateSuccessMsg.setWindowIcon(QIcon('qt-design\logo.png'))
 
         # Store data of new employee 
         self.bStoreNewEmployee = QPushButton(self.frameEmp)
@@ -325,13 +333,11 @@ class Ui_MainWindow(object):
         self.bEditTraining = QPushButton(self.frame_15)
         self.bEditTraining.setObjectName(u"bEditTraining")
         self.bEditTraining.setGeometry(QRect(300, 50, 151, 41))
-        self.bEditTraining.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-                "background-color: rgb(133, 205, 242);")
+        self.bEditTraining.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
         self.label_9 = QLabel(self.frame_15)
         self.label_9.setObjectName(u"label_9")
         self.label_9.setGeometry(QRect(40, 20, 251, 20))
-        self.label_9.setStyleSheet(u"color: rgb(34, 51, 59);\n"
-                "background-color: #DFF1FA")
+        self.label_9.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.comboBoxEditTraining = QComboBox(self.frame_15)
         self.comboBoxEditTraining.setObjectName(u"comboBoxEditTraining")
         self.comboBoxEditTraining.setGeometry(QRect(40, 60, 221, 31))
@@ -466,6 +472,6 @@ class Ui_MainWindow(object):
                 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:5.5pt; font-weight:400; font-style:normal;\">\n"
-                "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">\u00a9 Junghans Kunststoffwaren-Fabrik GmbH &amp; Co. KG</span></p></body></html>", None))
+                "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:6pt;\">\u00a9 Junghans Kunststoffwaren-Fabrik GmbH &amp; Co. KG</span></p></body></html>", None))
     # retranslateUi
         

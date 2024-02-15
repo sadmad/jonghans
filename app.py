@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
     # Input is invalid: Apply a style for invalid input, e.g., border color red
     incorrect = "QLineEdit { border: 2px solid red; background-color:white}"
 
-   
+    
     # Populate the new employee tab'd fields
     def populateEmployeeFields(self):
         self.employee_id = self.ui.comboBoxEditEmployee.currentData()  # Retrieve the stored employee ID
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
             print("Failed to connect to the database")  
         
 
-    # Get the data of new employee from the tab       
+    # Get the data of employee from the fields and store or update the employee data       
     def StoringNewEmployee(self):
         Employeename = self.ui.newEmployeeName.text() 
         lastname = self.ui.newEmployeeLastname.text()
@@ -256,12 +256,6 @@ class MainWindow(QMainWindow):
         position = self.ui.newEmployeePosition.text()
         hairingDate = self.ui.dateEditNeuenMitarbeiter.date().toPython()
         
-        
-        self.insertNewEmployeeDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
-        #self.populateComboBox()
-    
-    # Store new employee or edit employee in DB
-    def insertNewEmployeeDataIntoDatabase(self,  Employeename, lastname, email, position, hairingDate):
         conn = connect_to_db()
         if self.employee_id is not None:
             if conn is not None:
@@ -270,8 +264,10 @@ class MainWindow(QMainWindow):
                     cursor.execute("UPDATE employees SET f_name = %s, l_name = %s, email = %s, position_title = %s, hire_date = %s WHERE e_id = %s",
                                 (Employeename, lastname, email, position, hairingDate, self.employee_id))
                     conn.commit()
-                     # Show a success message
-                    QMessageBox.information(self, "Success", "Employee data updated successfully.")
+                    
+    
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_()
                     print("Employee data updated successfully")
                 except Exception as e:
                     print(f"Error updating employee data: {e}")
@@ -299,6 +295,10 @@ class MainWindow(QMainWindow):
                     conn.close()
             else:
                 print("Failed to connect to the database")
+        
+        self.insertNewEmployeeDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
+        #self.populateComboBox()
+    
 
     #------------------------
                 
@@ -354,7 +354,7 @@ class MainWindow(QMainWindow):
 # Change the font size---------------------
 def calculate_tab_font_size(screen_width, screen_height):
     # Example logic for calculating font size based on screen dimensions
-    base_width = 1700  # Reference screen width
+    base_width = 1750  # Reference screen width
     base_font_size = 8  # Base font size for tabs at the reference resolution
     scaling_factor = screen_width / base_width
     print(screen_width,scaling_factor)
