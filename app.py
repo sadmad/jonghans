@@ -1,7 +1,7 @@
 import sys
 import psycopg2
 from PySide2.QtWidgets import QApplication, QMainWindow, QTabWidget, QLabel
-from PySide2.QtGui import QIcon, QFont
+from PySide2.QtGui import QIcon, QFont, QScreen
 from ui_main import Ui_MainWindow
 from PySide2.QtGui import QRegExpValidator
 from PySide2.QtCore import QRegExp
@@ -9,7 +9,8 @@ from PySide2.QtWidgets import QLineEdit
 from PySide2.QtCore import QDate  # Use PyQt5.QtCore if you're using PyQt5
 from newMitarbeiterValidator import *
 from PySide2.QtWidgets import QMessageBox, QMainWindow
-from PySide2.QtGui import QScreen
+from PySide2 import QtWidgets
+
 
 # Validator's regex variables
 emailValidatorReg = r"^\S+@\S+\.\S+$"
@@ -32,14 +33,14 @@ def connect_to_db():
         return None
 
 class MainWindow(QMainWindow):
-
-    # Input is valid: Apply a style for valid input, e.g., border color green
-    correct = "QLineEdit { border: 2px solid green; background-color:white}"
-    # Input is invalid: Apply a style for invalid input, e.g., border color red
-    incorrect = "QLineEdit { border: 2px solid red; background-color:white}"
-
     
-    # Populate the new employee tab'd fields
+    # Input is valid: Apply a style for valid input, e.g., border color green
+    correct = "QLineEdit { border: 2px solid rgb(34, 139, 34); background-color: rgb(220, 245, 220);}"
+    # Input is invalid: Apply a style for invalid input, e.g., border color red
+    incorrect = "QLineEdit { border: 2px solid rgb(205, 92, 92); background-color:  rgb(250, 220, 220)}"
+
+ 
+    # Populate the new employee tab'd fields 
     def populateEmployeeFields(self):
         self.employee_id = self.ui.comboBoxEditEmployee.currentData()  # Retrieve the stored employee ID
         conn = connect_to_db()
@@ -174,10 +175,10 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.setCentralWidget(self.ui.centralwidget)  # Set the central widget
         self.setWindowIcon(QIcon("qt-design\logo.png"))
-        self.setWindowTitle("Junghans Shulung Datenbank")
-
-       
+        self.setWindowTitle("Junghans")
+        
         self.employee_id = None  # Initialize employee_id
+        self.schul_id = None # Initialize t_id
 
         # Initial check to set the correct state of the button when the app starts
         self.checkAllValidations()
@@ -239,6 +240,7 @@ class MainWindow(QMainWindow):
                 for row in cursor.fetchall():
                     e_id, f_name, l_name = row
                     self.ui.comboBoxEditEmployee.addItem(f_name +" " + l_name, e_id)
+                    self.ui.comboBoxEmpCertificateTab.addItem(f_name +" " + l_name, e_id)
             except Exception as e:
                 print(f"An error occurred while fetching employees: {e}")
             finally:
@@ -287,6 +289,8 @@ class MainWindow(QMainWindow):
                     """
                     cursor.execute(query, (Employeename, lastname, email, hairingDate, position))
                     conn.commit()  # Commit the transaction
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_()
                 except Exception as e:
                     print(f"An error occurred: {e}")
                     conn.rollback()  # Rollback in case of error
@@ -296,7 +300,7 @@ class MainWindow(QMainWindow):
             else:
                 print("Failed to connect to the database")
         
-        self.insertNewEmployeeDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
+        #self.insertNewEmployeeDataIntoDatabase(Employeename, lastname, email, position, hairingDate)
         #self.populateComboBox()
     
 
@@ -312,6 +316,7 @@ class MainWindow(QMainWindow):
                 for row in cursor.fetchall():
                     s_id, s_name = row
                     self.ui.comboBoxEditTraining.addItem(s_name, s_id)
+                    self.ui.comboBoxTrainingCertificateTab.addItem(s_name, s_id)
             except Exception as e:
                 print(f"An error occurred while fetching employees: {e}")
             finally:
@@ -326,26 +331,49 @@ class MainWindow(QMainWindow):
         duration = self.ui.newTrainingDuration.text()
         description = self.ui.newTrainingDescription.text()
 
-        self.insertNewTraininDataIntoDatabase(training, duration, description)
+        conn = connect_to_db()
+        if self.schul_id is None:
+            if conn is not None:
+                try:
+                    cursor = conn.cursor()
+                    query = """
+                            INSERT INTO schulung (s_name, duration, description)VALUES(%s, %s, %s)
+                            """
+                    cursor.execute(query, ( training, duration, description))
+                    conn.commit()
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_()
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+                    conn.rollback()  # Rollback in case of error
+                finally:
+                    cursor.close()
+                    conn.close()
+            else:
+                print("Failed to connect to the database")
+        else:
+            if conn is not None:
+                try:
+                    cursor = conn.cursor()
+                    query = "UPDATE schulung SET s_name=%s, duration=%s, description=%s WHERE s_id =%s"
+                    cursor.execute(query, (training, duration, description, self.schul_id))
+                    conn.commit()
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_()
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+                    conn.rollback()  # Rollback in case of error
+                finally:
+                    cursor.close()
+                    conn.close()
+            else:
+                print("Failed to connect to the database")
+        # Display  a success message in the message box
+
 
     # New Training Database Connections
     def insertNewTraininDataIntoDatabase(self, training, duration, description):
-        conn = connect_to_db()
-        if conn is not None:
-            try:
-                cursor = conn.cursor()
-                query = """INSERT INTO schulung (s_name, duration, description)VALUES(%s, %s, %s)"""
-                cursor.execute(query, ( training, duration, description))
-                conn.commit()
-            except Exception as e:
-                print(f"An error occurred: {e}")
-                conn.rollback()  # Rollback in case of error
-            finally:
-                cursor.close()
-                conn.close()
-        else:
-            print("Failed to connect to the database")
-
+        pass
 
     #----------------------------------
 
@@ -377,22 +405,21 @@ def adjust_label_font_size(widget, font_size):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)  # Pass sys.argv
+
     screen = app.primaryScreen()
     size = screen.size()
     print("this is the screen size: ",size)
     new_font_size = calculate_tab_font_size(size.width(), size.height())  # Define this function based on previous examples
     # Assuming mainWindow is your main window instance, adjust its labels and tabs
+    
     mainWindow = MainWindow()  # This is where you initialize your main window
     adjust_label_font_size(mainWindow, new_font_size)  # Adjust labels
     adjust_tab_font_size(mainWindow.ui.tabWidget, new_font_size)
 
-    
 
-    global_font = QFont("Century Gothic", 10)
+    global_font = QFont("Century Gothic", 9)
     app.setFont(global_font)
-    
-
     mainWindow.show()
-    connect_to_db()
+    
 
     sys.exit(app.exec_())  # Use sys.exit() for clean exit

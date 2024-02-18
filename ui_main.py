@@ -11,15 +11,20 @@
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+from stylesheet import *
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(850, 694)
-        MainWindow.setStyleSheet(u"background-color: rgb(34, 51, 59);\n")
-       
+        MainWindow.setMinimumSize(QSize(950, 900))
+   
+        MainWindow.setStyleSheet("""
+                                 QWidget{background-color: rgb(34, 51, 59)}
+                                 
+                                 """)
+        
         self.centralwidget = QWidget()
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setStyleSheet(u"QTabBar::tab {\n"
@@ -48,7 +53,8 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")     
-        
+        #self.pushButton.setStyleSheet()
+     
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setGeometry(QRect(10, 10, 651, 641))
@@ -58,57 +64,85 @@ class Ui_MainWindow(object):
         self.tabWidget.setFont(font)
         self.tabWidget.setAutoFillBackground(False)
         self.tabWidget.setStyleSheet(u"")
+        #tab start
         self.haupt = QWidget()
         self.haupt.setObjectName(u"haupt")
         self.haupt.setStyleSheet(u"")
+        self.tabWidget.addTab(self.haupt, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.haupt), (u"Start"))
+
+        # Main Frame -First From the left--------------
         self.frameMain = QFrame(self.haupt)
         self.frameMain.setObjectName(u"frameMain")
         self.frameMain.setGeometry(QRect(0, 0, 651, 601))
         self.frameMain.setStyleSheet(u"background-color:  #DFF1FA;\n""\n""")
         self.frameMain.setFrameShape(QFrame.StyledPanel)
         self.frameMain.setFrameShadow(QFrame.Raised)
+        # Firma Logo in fist page
         self.label_38 = QLabel(self.frameMain)
         self.label_38.setObjectName(u"label_38")
         self.label_38.setGeometry(QRect(170, 10, 321, 131))
-        self.label_38.setPixmap(QPixmap(u"1.png"))
+        self.label_38.setPixmap(QPixmap(u"qt-design/1.png"))
+
+        # First Ftame in main page-----------------
         self.frameSearchEmp = QFrame(self.frameMain)
         self.frameSearchEmp.setObjectName(u"frameSearchEmp")
         self.frameSearchEmp.setGeometry(QRect(60, 160, 531, 141))
         self.frameSearchEmp.setFrameShape(QFrame.StyledPanel)
         self.frameSearchEmp.setFrameShadow(QFrame.Raised)
+
+        
+        # The Label 
+        self.labelMainEmp = QLabel(self.frameSearchEmp)
+        self.labelMainEmp.setObjectName(u"labelMainEmp")
+        self.labelMainEmp.setGeometry(QRect(30, 20, 270, 20))
+        self.labelMainEmp.setText("Zertifikatsübersicht für Mitarbeiter")
+        self.labelMainEmp.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+
+        self.comboBoxEmployeeMain = QComboBox(self.frameSearchEmp)
+        self.comboBoxEmployeeMain.setObjectName(u"comboBoxEmployeeMain")
+        self.comboBoxEmployeeMain.setGeometry(QRect(30, 55, 221, 31))
+        self.comboBoxEmployeeMain.setStyleSheet(combo)
+
+        # Button search elployee's certificate
         self.bSearchEmployeeCertificate = QPushButton(self.frameSearchEmp)
         self.bSearchEmployeeCertificate.setObjectName(u"bSearchEmployeeCertificate")
         self.bSearchEmployeeCertificate.setGeometry(QRect(330, 50, 151, 41))
-        self.bSearchEmployeeCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
-        self.label_52 = QLabel(self.frameSearchEmp)
-        self.label_52.setObjectName(u"label_52")
-        self.label_52.setGeometry(QRect(10, 20, 251, 20))
-        self.label_52.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
-        self.comboBoxEmployeeMain = QComboBox(self.frameSearchEmp)
-        self.comboBoxEmployeeMain.setObjectName(u"comboBoxEmployeeMain")
-        self.comboBoxEmployeeMain.setGeometry(QRect(30, 60, 221, 31))
-        self.comboBoxEmployeeMain.setStyleSheet(u"background-color: rgb(224, 239, 245);")
-        self.label_52.raise_()
+        self.bSearchEmployeeCertificate.setCursor(Qt.PointingHandCursor)
+        self.bSearchEmployeeCertificate.setStyleSheet(stylesheets)
+
+        self.labelMainEmp.raise_()
         self.comboBoxEmployeeMain.raise_()
         self.bSearchEmployeeCertificate.raise_()
+        # First Frame-----------------
+
+        # Second Frame---------------
         self.frameSearchExCertificate = QFrame(self.frameMain)
         self.frameSearchExCertificate.setObjectName(u"frameSearchExCertificate")
         self.frameSearchExCertificate.setGeometry(QRect(60, 320, 531, 141))
         self.frameSearchExCertificate.setFrameShape(QFrame.StyledPanel)
         self.frameSearchExCertificate.setFrameShadow(QFrame.Raised)
+
+        # Button Search Excertificate
         self.bSearchExCertificateByDate = QPushButton(self.frameSearchExCertificate)
         self.bSearchExCertificateByDate.setObjectName(u"bSearchExCertificateByDate")
         self.bSearchExCertificateByDate.setGeometry(QRect(330, 50, 151, 41))
-        self.bSearchExCertificateByDate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
-        self.label_58 = QLabel(self.frameSearchExCertificate)
-        self.label_58.setObjectName(u"label_58")
-        self.label_58.setGeometry(QRect(10, 10, 441, 20))
-        self.label_58.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
-        self.dateExpireCertificateSearch = QDateEdit(self.frameSearchExCertificate)
+        self.bSearchExCertificateByDate.setCursor(Qt.PointingHandCursor)
+        self.bSearchExCertificateByDate.setStyleSheet(stylesheets)
+        
+        self.labelSuchenExCer = QLabel(self.frameSearchExCertificate)
+        self.labelSuchenExCer.setObjectName(u"labelSuchenExCer")
+        self.labelSuchenExCer.setGeometry(QRect(30, 20, 441, 20))
+        self.labelSuchenExCer.setText("Ablaufende Zertifikate im Zeitraum finden")
+        self.labelSuchenExCer.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+
+        self.dateExpireCertificateSearch = QDateEdit(self.frameSearchExCertificate, calendarPopup=True)
         self.dateExpireCertificateSearch.setObjectName(u"dateExpireCertificateSearch")
-        self.dateExpireCertificateSearch.setGeometry(QRect(20, 60, 231, 31))
-        self.dateExpireCertificateSearch.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.tabWidget.addTab(self.haupt, "")
+        self.dateExpireCertificateSearch.setDate(QDate.currentDate())
+        self.dateExpireCertificateSearch.setGeometry(QRect(30, 55, 231, 31))
+        self.dateExpireCertificateSearch.setStyleSheet(cal)
+
+       
         self.add_new_certificate = QWidget()
         self.add_new_certificate.setObjectName(u"add_new_certificate")
         self.add_new_certificate.setLocale(QLocale(QLocale.German, QLocale.Germany))
@@ -116,22 +150,23 @@ class Ui_MainWindow(object):
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(40, 45, 71, 21))
         self.label.setStyleSheet("color: rgb(34, 51, 59);")
-        self.label_2 = QLabel(self.add_new_certificate)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(360, 45, 91, 21))
-        self.label_2.setStyleSheet("color: rgb(34, 51, 59);")
-        self.label_3 = QLabel(self.add_new_certificate)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(360, 135, 71, 21))
-        self.label_3.setStyleSheet(u"color: rgb(34, 51, 59);")
-        self.label_4 = QLabel(self.add_new_certificate)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(40, 135, 71, 21))
-        self.label_4.setStyleSheet("color: rgb(34, 51, 59);")
-        self.label_5 = QLabel(self.add_new_certificate)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(40, 255, 170, 20))
-        self.label_5.setStyleSheet(u"color: rgb(34, 51, 59);")
+        self.labelNachname = QLabel(self.add_new_certificate)
+        self.labelNachname.setObjectName(u"labelNachname")
+        self.labelNachname.setGeometry(QRect(360, 45, 91, 21))
+        self.labelNachname.setStyleSheet("color: rgb(34, 51, 59);")
+        self.labelAbteilung = QLabel(self.add_new_certificate)
+        self.labelAbteilung.setObjectName(u"labelAbteilung")
+        self.labelAbteilung.setGeometry(QRect(360, 135, 100, 21))
+        self.labelAbteilung.setStyleSheet(u"color: rgb(34, 51, 59);")
+        self.labelEMail = QLabel(self.add_new_certificate)
+        self.labelEMail.setObjectName(u"labelEMail")
+        self.labelEMail.setGeometry(QRect(40, 135, 71, 21))
+        self.labelEMail.setStyleSheet("color: rgb(34, 51, 59);")
+        self.labelEintrittsdatum = QLabel(self.add_new_certificate)
+        self.labelEintrittsdatum.setObjectName(u"labelEintrittsdatum")
+        self.labelEintrittsdatum.setGeometry(QRect(40, 255, 170, 20))
+        self.labelEintrittsdatum.setStyleSheet(u"color: rgb(34, 51, 59);")
+        self.labelEintrittsdatum.setText("Eintrittsdatum")
         
         # The fields of the new employee
         #-------------------------------------------------------
@@ -179,24 +214,30 @@ class Ui_MainWindow(object):
         self.frame_14.setGeometry(QRect(60, 360, 531, 211))
         self.frame_14.setFrameShape(QFrame.StyledPanel)
         self.frame_14.setFrameShadow(QFrame.Raised)
+
+        # Button edit Employee
         self.bEditEmployee = QPushButton(self.frame_14)
         self.bEditEmployee.setObjectName(u"bEditEmployee")
-        self.bEditEmployee.setGeometry(QRect(330, 50, 151, 41))
+        self.bEditEmployee.setGeometry(QRect(340, 50, 151, 41))
         self.bEditEmployee.setCursor(Qt.PointingHandCursor)
-        self.bEditEmployee.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
+        self.bEditEmployee.setStyleSheet(stylesheets)
+        self.bEditEmployee.setText("Bearbeiten")
+
         self.label_8 = QLabel(self.frame_14)
         self.label_8.setObjectName(u"label_8")
-        self.label_8.setGeometry(QRect(30, 20, 251, 20))
+        self.label_8.setGeometry(QRect(10, 20, 251, 20))
         self.label_8.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+        # Tab New employee edit and employee
         self.comboBoxEditEmployee = QComboBox(self.frame_14)
         self.comboBoxEditEmployee.setObjectName(u"comboBoxEditEmployee")
-        self.comboBoxEditEmployee.setGeometry(QRect(40, 60, 251, 31))
-        self.comboBoxEditEmployee.setStyleSheet(u"background-color: rgb(224, 239, 245); color: darkblue")
+        self.comboBoxEditEmployee.setGeometry(QRect(10, 57, 251, 31))
+        self.comboBoxEditEmployee.setStyleSheet(combo)
+        
         # Meaage box after Update
         self.updateSuccessMsg = QMessageBox()
-        self.updateSuccessMsg.setStyleSheet("background-color: rgb(224, 239, 245); font: 8pt")
+        self.updateSuccessMsg.setStyleSheet(stylesheets)
         self.updateSuccessMsg.setWindowTitle("Erfolgreich")
-        self.updateSuccessMsg.setText("Das Update war erfolgreich")
+        self.updateSuccessMsg.setText("Die Daten wurden erfolgreich in der Datenbank gespeichert.")
         self.updateSuccessMsg.setIcon(QMessageBox.Information)
         self.updateSuccessMsg.setStandardButtons(QMessageBox.Ok)
         self.updateSuccessMsg.setWindowIcon(QIcon('qt-design\logo.png'))
@@ -206,56 +247,23 @@ class Ui_MainWindow(object):
         self.bStoreNewEmployee.setObjectName(u"bStoreNewEmployee")
         self.bStoreNewEmployee.setGeometry(QRect(360, 270, 241, 51))
         self.bStoreNewEmployee.setCursor(Qt.PointingHandCursor)
-        self.bStoreNewEmployee.setStyleSheet("""
-        QPushButton {
-                /* Styles for enabled state */
-                background-color: rgb(133, 205, 242);
-                color: rgb(255, 255, 255);
-                }
-        QPushButton:disabled {
-                background-color: #B0D4E8; /* Disabled state */
-                color: #A0A0A0;  /* Darker text for disabled state */}""")
+        self.bStoreNewEmployee.setStyleSheet(stylesheets)
 
         # New employee hiering date    
-        self.dateEditNeuenMitarbeiter = QDateEdit(self.frameEmp, calendarPopup=True)
-        self.dateEditNeuenMitarbeiter.setObjectName(u"dateEditNeuenMitarbeiter")
-        self.dateEditNeuenMitarbeiter.setDate(QDate.currentDate())
-        self.dateEditNeuenMitarbeiter.setGeometry(QRect(40, 278, 241, 41))
+        self.dateEditNeuerMitarbeiter = QDateEdit(self.frameEmp, calendarPopup=True)
+        self.dateEditNeuerMitarbeiter.setObjectName(u"dateEditNeuerMitarbeiter")
+        self.dateEditNeuerMitarbeiter.setDate(QDate.currentDate())
+        self.dateEditNeuerMitarbeiter.setGeometry(QRect(40, 278, 241, 41))
         #QLocale.setDefault(QLocale(QLocale.German, QLocale.Germany))
-        self.dateEditNeuenMitarbeiter.setStyleSheet("""
-        QDateEdit {
-                color: darkblue; /* Text color */
-        
-        }
-        QDateEdit QAbstractItemView {
-                background-color: lightblue; /* Calendar dropdown background */
-                color: darkblue; /* Text color in the dropdown */
-                font: 12px;
-        }
-        QCalendarWidget QWidget#qt_calendar_navigationbar {  
-                color: red;
-                                                
-        }
-        QCalendarWidget QWidget#qt_calendar_navigationbar QMenu, QCalendarWidget QWidget#qt_calendar_navigationbar QSpinBox {
-                background-color: lightblue;
-                color: darkblue;
-        }
-        QCalendarWidget { min-width: 280px; color:black} /* Set minimum width for all QCalendarWidgets */ 
-        QCalendarWidget QToolButton {
-                background-color: lightblue;
-                color: white;
-                font-size: 10pt;
-                icon-size: 16px, 16px; /* Width, Height */
-        }                
-        """)
+        self.dateEditNeuerMitarbeiter.setStyleSheet(cal)
         
         self.tabWidget.addTab(self.add_new_certificate, "")
         self.frameEmp.raise_()
         self.label.raise_()
-        self.label_2.raise_()
-        self.label_3.raise_()
-        self.label_4.raise_()
-        self.label_5.raise_()
+        self.labelNachname.raise_()
+        self.labelAbteilung.raise_()
+        self.labelEMail.raise_()
+        self.labelEintrittsdatum.raise_()
         self.newEmployeeName.raise_()
         self.newEmployeeLastname.raise_()
         self.newEmployeeEmail.raise_()
@@ -297,15 +305,17 @@ class Ui_MainWindow(object):
                 "border-style: solid;\n"
                 "border-width: 1px;\n"
                 "border-color: rgb(175, 221, 244);")
-        self.label_13 = QLabel(self.framNewTraining)
-        self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(40, 40, 71, 21))
-        self.label_13.setStyleSheet(u"color: rgb(34, 51, 59);")
-        self.label_15 = QLabel(self.framNewTraining)
-        self.label_15.setObjectName(u"label_15")
-        self.label_15.setGeometry(QRect(40, 120, 131, 21))
-        self.label_15.setStyleSheet(u"color: rgb(34, 51, 59);")
-
+        self.SchulungBezeichnung = QLabel(self.framNewTraining)
+        self.SchulungBezeichnung.setObjectName(u"SchulungBezeichnung")
+        self.SchulungBezeichnung.setGeometry(QRect(40, 40, 250, 21))
+        self.SchulungBezeichnung.setStyleSheet(u"color: rgb(34, 51, 59);")
+        self.SchulungBezeichnung.setText("Schulung Bezeichnung")
+        # Bechreibung Input
+        self.BeschreibungInhalt = QLabel(self.framNewTraining)
+        self.BeschreibungInhalt.setObjectName(u"BeschreibungInhalt")
+        self.BeschreibungInhalt.setGeometry(QRect(40, 123, 250, 21))
+        self.BeschreibungInhalt.setStyleSheet(u"color: rgb(34, 51, 59);")
+        self.BeschreibungInhalt.setText("Beschreibung'/Inhalt")
         # New training Description field
         self.newTrainingDescription = QLineEdit(self.framNewTraining)
         self.newTrainingDescription.setObjectName(u"newTrainingDescription")
@@ -314,51 +324,63 @@ class Ui_MainWindow(object):
                 "border-style: solid;\n"
                 "border-width: 1px;\n"
                 "border-color: rgb(175, 221, 244);")
+        
+        # Button new training
         self.bNewTrainingStore = QPushButton(self.framNewTraining)
         self.bNewTrainingStore.setObjectName(u"bNewTrainingStore")
         self.bNewTrainingStore.setGeometry(QRect(210, 360, 221, 51))
-        self.bNewTrainingStore.setStyleSheet("""QPushButton {
-                /* Styles for enabled state */
-                background-color: rgb(133, 205, 242);
-                color: rgb(255, 255, 255);
-                }
-        QPushButton:disabled {
-                background-color: #B0D4E8; /* Disabled state */
-                color: #A0A0A0;  /* Darker text for disabled state */}""")
-        self.frame_15 = QFrame(self.framNewTraining)
-        self.frame_15.setObjectName(u"frame_15")
-        self.frame_15.setGeometry(QRect(60, 430, 531, 141))
-        self.frame_15.setFrameShape(QFrame.StyledPanel)
-        self.frame_15.setFrameShadow(QFrame.Raised)
-        self.bEditTraining = QPushButton(self.frame_15)
+        self.bNewTrainingStore.setCursor(Qt.PointingHandCursor)
+        self.bNewTrainingStore.setStyleSheet(stylesheets)
+        
+        self.frameEditTraining = QFrame(self.framNewTraining)
+        self.frameEditTraining.setObjectName(u"frameEditTraining")
+        self.frameEditTraining.setGeometry(QRect(60, 445, 531, 141))
+        self.frameEditTraining.setFrameShape(QFrame.StyledPanel)
+        self.frameEditTraining.setFrameShadow(QFrame.Raised)
+
+        # Button edit training
+        self.bEditTraining = QPushButton(self.frameEditTraining)
         self.bEditTraining.setObjectName(u"bEditTraining")
-        self.bEditTraining.setGeometry(QRect(300, 50, 151, 41))
-        self.bEditTraining.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
-        self.label_9 = QLabel(self.frame_15)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setGeometry(QRect(40, 20, 251, 20))
-        self.label_9.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
-        self.comboBoxEditTraining = QComboBox(self.frame_15)
+        self.bEditTraining.setGeometry(QRect(320, 46, 150, 41))
+        self.bEditTraining.setCursor(Qt.PointingHandCursor)
+        self.bEditTraining.setStyleSheet(stylesheets)
+
+        self.shulBearbeiten = QLabel(self.frameEditTraining)
+        self.shulBearbeiten.setObjectName(u"shulBearbeiten")
+        self.shulBearbeiten.setGeometry(QRect(35, 20, 251, 20))
+        self.shulBearbeiten.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+        self.shulBearbeiten.setText("Schulung Bearbeiten")
+
+        self.comboBoxEditTraining = QComboBox(self.frameEditTraining)
         self.comboBoxEditTraining.setObjectName(u"comboBoxEditTraining")
-        self.comboBoxEditTraining.setGeometry(QRect(40, 60, 221, 31))
-        self.comboBoxEditTraining.setStyleSheet(u"background-color: rgb(224, 239, 245);")
+        self.comboBoxEditTraining.setGeometry(QRect(35, 55, 221, 31))
+        self.comboBoxEditTraining.setStyleSheet(combo)
+
         self.tabWidget.addTab(self.add_new_person, "")
+
+        # Tab Dokumente
         self.add_certificate = QWidget()
         self.add_certificate.setObjectName(u"add_certificate")
+        self.tabWidget.addTab(self.add_certificate, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_certificate), (u"Dokumente"))
+   
+
         self.frameCertificate = QFrame(self.add_certificate)
         self.frameCertificate.setObjectName(u"frameCertificate")
         self.frameCertificate.setGeometry(QRect(0, 0, 651, 601))
         self.frameCertificate.setStyleSheet(u"background-color:  #DFF1FA;\n""")
         self.frameCertificate.setFrameShape(QFrame.StyledPanel)
         self.frameCertificate.setFrameShadow(QFrame.Raised)
+
         self.comboBoxEmpCertificateTab = QComboBox(self.frameCertificate)
         self.comboBoxEmpCertificateTab.setObjectName(u"comboBoxEmpCertificateTab")
         self.comboBoxEmpCertificateTab.setGeometry(QRect(310, 80, 231, 31))
-        self.comboBoxEmpCertificateTab.setStyleSheet(u"background-color: rgb(224, 239, 245);")
+        self.comboBoxEmpCertificateTab.setStyleSheet(combo)
+
         self.comboBoxTrainingCertificateTab = QComboBox(self.frameCertificate)
         self.comboBoxTrainingCertificateTab.setObjectName(u"comboBoxTrainingCertificateTab")
         self.comboBoxTrainingCertificateTab.setGeometry(QRect(310, 150, 231, 31))
-        self.comboBoxTrainingCertificateTab.setStyleSheet(u"background-color: rgb(224, 239, 245);")
+        self.comboBoxTrainingCertificateTab.setStyleSheet(combo)
         self.label_53 = QLabel(self.frameCertificate)
         self.label_53.setObjectName(u"label_53")
         self.label_53.setGeometry(QRect(50, 90, 111, 21))
@@ -379,36 +401,57 @@ class Ui_MainWindow(object):
         self.label_57.setObjectName(u"label_57")
         self.label_57.setGeometry(QRect(50, 360, 131, 20))
         self.label_57.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+
+        # Button upload an certificate Image
         self.bCertificateImage = QPushButton(self.frameCertificate)
         self.bCertificateImage.setObjectName(u"bCertificateImage")
-        self.bCertificateImage.setGeometry(QRect(350, 350, 151, 41))
-        self.bCertificateImage.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
+        self.bCertificateImage.setGeometry(QRect(350, 320, 151, 41))
+        self.bCertificateImage.setCursor(Qt.PointingHandCursor)
+        self.bCertificateImage.setStyleSheet(stylesheets)
+
+        # Button Save the certificate and connect the emplooyee and a schulung
+        self.bStoreEmpCerFile = QPushButton(self.frameCertificate)
+        self.bStoreEmpCerFile.setObjectName(u"bStoreEmpCerFile")
+        self.bStoreEmpCerFile.setGeometry(QRect(350, 380, 151, 41))
+        self.bStoreEmpCerFile.setCursor(Qt.PointingHandCursor)
+        self.bStoreEmpCerFile.setStyleSheet(stylesheets)
+        
         self.frame_16 = QFrame(self.frameCertificate)
         self.frame_16.setObjectName(u"frame_16")
         self.frame_16.setGeometry(QRect(50, 420, 531, 141))
         self.frame_16.setFrameShape(QFrame.StyledPanel)
         self.frame_16.setFrameShadow(QFrame.Raised)
+
+        # Button edit a liked certificate to a employee
         self.bEditCertificate = QPushButton(self.frame_16)
         self.bEditCertificate.setObjectName(u"bEditCertificate")
         self.bEditCertificate.setGeometry(QRect(300, 50, 151, 41))
-        self.bEditCertificate.setStyleSheet(u"color: rgb(255, 255, 255);\n""background-color: rgb(133, 205, 242);")
-        self.label_34 = QLabel(self.frame_16)
-        self.label_34.setObjectName(u"label_34")
-        self.label_34.setGeometry(QRect(40, 20, 251, 20))
-        self.label_34.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+        self.bEditCertificate.setCursor(Qt.PointingHandCursor)
+        self.bEditCertificate.setStyleSheet(stylesheets)
+
+        self.editDok = QLabel(self.frame_16)
+        self.editDok.setObjectName(u"editDok")
+        self.editDok.setGeometry(QRect(40, 20, 251, 20))
+        self.editDok.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
+        self.editDok.setText("Dokument Bearbeiten")
+
         self.comboBoxEditCertificate = QComboBox(self.frame_16)
         self.comboBoxEditCertificate.setObjectName(u"comboBoxEditCertificate")
         self.comboBoxEditCertificate.setGeometry(QRect(40, 60, 221, 31))
-        self.comboBoxEditCertificate.setStyleSheet(u"background-color: rgb(224, 239, 245);")
-        self.dateCertificateTab = QDateEdit(self.frameCertificate)
+        self.comboBoxEditCertificate.setStyleSheet(combo)
+
+        self.dateCertificateTab = QDateEdit(self.frameCertificate, calendarPopup=True)
         self.dateCertificateTab.setObjectName(u"dateCertificateTab")
+        self.dateCertificateTab.setDate(QDate.currentDate())
         self.dateCertificateTab.setGeometry(QRect(310, 210, 231, 31))
-        self.dateCertificateTab.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.expierDateCertificateTab = QDateEdit(self.frameCertificate)
+        self.dateCertificateTab.setStyleSheet(cal)
+
+        self.expierDateCertificateTab = QDateEdit(self.frameCertificate, calendarPopup=True)
         self.expierDateCertificateTab.setObjectName(u"expierDateCertificateTab")
+        self.expierDateCertificateTab.setDate(QDate.currentDate())
         self.expierDateCertificateTab.setGeometry(QRect(310, 280, 231, 31))
-        self.expierDateCertificateTab.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.tabWidget.addTab(self.add_certificate, "")
+        self.expierDateCertificateTab.setStyleSheet(cal)
+        
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setGeometry(QRect(150, 660, 381, 31))
@@ -427,33 +470,31 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label_38.setText("")
         self.bSearchEmployeeCertificate.setText(QCoreApplication.translate("MainWindow", u"Suchen", None))
-        self.label_52.setText(QCoreApplication.translate("MainWindow", u"Suche nach einem Mitarbeiter", None))
+
         self.bSearchExCertificateByDate.setText(QCoreApplication.translate("MainWindow", u"Suchen", None))
-        self.label_58.setText(QCoreApplication.translate("MainWindow", u"Suchen Sie nach ablaufenden Zertifikaten", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.haupt), QCoreApplication.translate("MainWindow", u"Hauptfenster", None))
+
 
 
         self.label.setText(QCoreApplication.translate("MainWindow", u"Vorname", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Nachname", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Stelle", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"E-Mail", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Anstellungsdatum", None))
+        self.labelNachname.setText(QCoreApplication.translate("MainWindow", u"Nachname", None))
+        self.labelAbteilung.setText(QCoreApplication.translate("MainWindow", u"Abteilung", None))
+        self.labelEMail.setText(QCoreApplication.translate("MainWindow", u"E-Mail", None))
+
         self.newEmployeeEmail.setText("")
         self.newEmployeeEmail.setPlaceholderText("example@domain-name.de")
         
-        self.bEditEmployee.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten Sie einen Mitarbeiter", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"Mitarbeiter Bearbeiten", None))
         self.bStoreNewEmployee.setText(QCoreApplication.translate("MainWindow", u"Speichern", None))
         
         
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_new_certificate), QCoreApplication.translate("MainWindow", u"Neuen Mitarbeiter", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_new_certificate), QCoreApplication.translate("MainWindow", u"Neuer Mitarbeiter", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"PushButton", None))
         self.label_17.setText(QCoreApplication.translate("MainWindow", u"Dauer", None))
-        self.label_13.setText(QCoreApplication.translate("MainWindow", u"Name", None))
-        self.label_15.setText(QCoreApplication.translate("MainWindow", u"Beschreibung", None))
+        #self.label_13.setText(QCoreApplication.translate("MainWindow", u"Schulung Bezeichnung", None))
+        #self.label_15.setText(QCoreApplication.translate("MainWindow", u"Beschreibung/Inhalt", None))
         self.bNewTrainingStore.setText(QCoreApplication.translate("MainWindow", u"Speichern", None))
         self.bEditTraining.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten", None))
-        self.label_9.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten Sie einen Schulung", None))
+        #self.label_9.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten Sie einen Schulung", None))
 
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_new_person), QCoreApplication.translate("MainWindow", u"Neue Schulung", None))
@@ -463,11 +504,12 @@ class Ui_MainWindow(object):
         self.label_56.setText(QCoreApplication.translate("MainWindow", u"Verfallsdatum", None))
         self.label_57.setText(QCoreApplication.translate("MainWindow", u"Zertifikat", None))
         self.bCertificateImage.setText(QCoreApplication.translate("MainWindow", u"Bild", None))
+        self.bStoreEmpCerFile.setText(QCoreApplication.translate("MainWindow", u"Speichern", None))
         self.bEditCertificate.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten", None))
-        self.label_34.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten Sie eine Zertificat", None))
+        #self.label_34.setText(QCoreApplication.translate("MainWindow", u"Bearbeiten Sie eine Zertificat", None))
 
 
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_certificate), QCoreApplication.translate("MainWindow", u"Zertifikat registrieren", None))
+        #self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_certificate), QCoreApplication.translate("MainWindow", u"Dokumente", None))
         self.textEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
                 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
                 "p, li { white-space: pre-wrap; }\n"
