@@ -1,15 +1,14 @@
 import sys
+import os
+import shutil
 import psycopg2
-from PySide2.QtWidgets import QApplication, QMainWindow, QTabWidget, QLabel
-from PySide2.QtGui import QIcon, QFont, QScreen
+from PySide2.QtWidgets import *
+from PySide2.QtGui import QIcon, QFont, QScreen, QRegExpValidator
 from ui_main import Ui_MainWindow
-from PySide2.QtGui import QRegExpValidator
-from PySide2.QtCore import QRegExp
-from PySide2.QtWidgets import QLineEdit
-from PySide2.QtCore import QDate  # Use PyQt5.QtCore if you're using PyQt5
+from PySide2.QtCore import QRegExp, QDate  # Use PyQt5.QtCore if you're using PyQt5
 from newMitarbeiterValidator import *
-from PySide2.QtWidgets import QMessageBox, QMainWindow
-from PySide2 import QtWidgets
+
+
 
 
 # Validator's regex variables
@@ -138,8 +137,56 @@ class MainWindow(QMainWindow):
             inputField.setStyleSheet(self.incorrect)
 
 
+    # File Address certifilates tab
+    def getTheFileAddress(self):
+        try:
+            options = QFileDialog.Options()
+            # Correct usage of QFileDialog to open a file dialog
+            self.fileName, _ = QFileDialog.getOpenFileName(self, "Zertifikatsdatei auswählen", "",
+                                                  "PDF Files (*.pdf);;Image Files (*.jpg *.jpeg *.png)", options=options)
+            
+        except Exception as e:
+            print(self.fileName)
+    
+    # Link the emp and certifikate and store the certificate file in the folder
+    def storeEmpCertificate(self):
+        eId = self.ui.comboBoxEmpCertificateTab.currentData() 
+        sId = self.ui.comboBoxTrainingCertificateTab.currentData()
+        dateOfIssue = self.ui.dateCertificateTab.date().toPython()
+        expiration = self.ui.expierDateCertificateTab.date().toPython()
+        # Extract employee name from the form
+        employee_name = self.ui.comboBoxEmpCertificateTab.currentText()
+        # Define the directory path based on the employee's name
+        directory_path = os.path.join('Dokumente', employee_name)
+        # Create the directory if it does not exist
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
+        # Copy the file to the new directory
+        shutil.copy(self.fileName, directory_path)
+        # Generate the full path of the new file
+        new_file_path = os.path.join(directory_path, os.path.basename(self.fileName))
 
-
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                query = """
+                        INSERT INTO certificate (e_id, s_id, date_of_issue, date_of_expiration, certificate_image_path)VALUES(%s, %s, %s, %s, %s)
+                        """
+                cursor.execute(query, (eId, sId, dateOfIssue, expiration, new_file_path ))
+                conn.commit()
+    
+                # Display  a success message in the message box
+                self.ui.updateSuccessMsg.exec_()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+            except Exception as e:
+                print(f"Error storing the certificate for the employee data: {e}")
+                conn.rollback()
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            print("Failed to connect to the database")
+            
     # # Update employee in DB
     # def updateEmployeeData(self):
     #     employee_id = self.ui.comboBoxEditEmployee.currentData()
@@ -179,6 +226,7 @@ class MainWindow(QMainWindow):
         
         self.employee_id = None  # Initialize employee_id
         self.schul_id = None # Initialize t_id
+        self.fileName = None 
 
         # Initial check to set the correct state of the button when the app starts
         self.checkAllValidations()
@@ -227,7 +275,13 @@ class MainWindow(QMainWindow):
 
         # Submit New Training 
         self.ui.bNewTrainingStore.clicked.connect(self.StoringNewTraining)
+
+        # Get the file address
+        self.ui.bCertificateImage.clicked.connect(self.getTheFileAddress)
+        # Store the employee's training
+        self.ui.bStoreEmpCerFile.clicked.connect(self.storeEmpCertificate)
     # End Of INIT-------------------------
+
         
     # New Employee Database Connecetions--------------        
     # Retrieve data from DB EMPLOYEE TABLE
