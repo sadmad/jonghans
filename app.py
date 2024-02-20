@@ -67,6 +67,48 @@ class MainWindow(QMainWindow):
         else:
             print("Failed to connect to the database")
 
+    # Populate fields of tab dokumente
+    def populateCerEmpfields(self):
+        id = self.ui.comboBoxEditCertificate.currentData() # Rrtrive the stored list of ids cer_id
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                query = """
+                        SELECT certificate.*, employees.e_id, employees.f_name, employees.l_name, schulung.s_id, schulung.s_name
+                        FROM certificate
+                        JOIN employees ON certificate.e_id = employees.e_id
+                        JOIN schulung ON certificate.s_id = schulung.s_id
+                        WHERE certificate.c_id = %s;
+                        """
+                cursor.execute(query, (id,))
+                certifucateData = cursor.fetchall()
+
+                if certifucateData:
+                    # Assuming certificateData[0] contains the data tuple
+                    data = certifucateData[0]
+                    print(data)
+                    # Example of setting data to UI elements
+                    # Set employee name combining first name and last name
+                    self.ui.comboBoxEmpCertificateTab.setCurrentText(f"{data[7]} {data[8]}") # Adjust the index based on your data
+                    # Set training name
+                    self.ui.comboBoxTrainingCertificateTab.setCurrentText(data[10]) # Adjust the index based on your data
+                    # Set dates (assuming your UI has a method to set date from a QDate)
+                    self.ui.dateCertificateTab.setDate(data[3]) # Adjust method to set QDate
+                    self.ui.expierDateCertificateTab.setDate(data[4]) # Adjust method to set QDate
+                    # For setting the file name, you'll need to handle it based on how you manage file selection
+                    self.certificateAddress = data[5]
+           
+
+            except Exception as e:
+                print(f"Error fetching certificate details: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+            self.document = id
+        else:
+            print("Failed to connect to the database")    
+
 
     # Populate the new Training tab's fields
     def populateTrainingFields(self):
@@ -156,37 +198,68 @@ class MainWindow(QMainWindow):
         expiration = self.ui.expierDateCertificateTab.date().toPython()
         # Extract employee name from the form
         employee_name = self.ui.comboBoxEmpCertificateTab.currentText()
-        # Define the directory path based on the employee's name
-        directory_path = os.path.join('Dokumente', employee_name)
-        # Create the directory if it does not exist
-        if not os.path.exists(directory_path):
-            os.makedirs(directory_path)
-        # Copy the file to the new directory
-        shutil.copy(self.fileName, directory_path)
-        # Generate the full path of the new file
-        new_file_path = os.path.join(directory_path, os.path.basename(self.fileName))
+       
+        if self.fileName is not None:
+            # Check if the file is updated we need to delete the old file
+            if self.certificateAddress is not None:
+                # Check if the file exists before attempting to delete
+                if os.path.exists(self.certificateAddress):
+                    try:
+                        os.remove(self.certificateAddress)
+                        print("Old certificate file deleted successfully.")
+                    except Exception as e:
+                        print(f"Error deleting the old certificate file: {e}")
+                else:
+                    print("Old certificate file does not exist.")
 
+            # Define the directory path based on the employee's name
+            directory_path = os.path.join('Dokumente', employee_name)
+            # Create the directory if it does not exist
+            if not os.path.exists(directory_path):
+                os.makedirs(directory_path)
+            # Copy the file to the new directory
+            shutil.copy(self.fileName, directory_path)
+            # Generate the full path of the new file
+            new_file_path = os.path.join(directory_path, os.path.basename(self.fileName))
+        else:
+            new_file_path = self.certificateAddress
         conn = connect_to_db()
         if conn is not None:
-            try:
-                cursor = conn.cursor()
-                query = """
-                        INSERT INTO certificate (e_id, s_id, date_of_issue, date_of_expiration, certificate_image_path)VALUES(%s, %s, %s, %s, %s)
-                        """
-                cursor.execute(query, (eId, sId, dateOfIssue, expiration, new_file_path ))
-                conn.commit()
-    
-                # Display  a success message in the message box
-                self.ui.updateSuccessMsg.exec_()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
-            except Exception as e:
-                print(f"Error storing the certificate for the employee data: {e}")
-                conn.rollback()
-            finally:
-                cursor.close()
-                conn.close()
+            cursor = conn.cursor()
+            if self.document is None:
+                try:
+                    
+                    query = """
+                            INSERT INTO certificate (e_id, s_id, date_of_issue, date_of_expiration, certificate_image_path)VALUES(%s, %s, %s, %s, %s)
+                            """
+                    cursor.execute(query, (eId, sId, dateOfIssue, expiration, new_file_path ))
+                    conn.commit()
+        
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                except Exception as e:
+                    print(f"Error storing the certificate for the employee data: {e}")
+                    conn.rollback()
+                finally:
+                    cursor.close()
+                    conn.close()
+            else:
+                try:
+                   
+                    cursor.execute("UPDATE certificate SET e_id = %s, s_id = %s, date_of_issue = %s, date_of_expiration = %s, certificate_image_path=%s WHERE c_id = %s", (eId, sId, dateOfIssue, expiration, new_file_path, self.document))
+                    conn.commit()
+                    # Display  a success message in the message box
+                    self.ui.updateSuccessMsg.exec_() 
+                except Exception as e:
+                    print(f"Error updating the certificate for the employee data: {e}")
+                    conn.rollback()
+                finally:
+                    cursor.close()
+                    conn.close()
+
         else:
             print("Failed to connect to the database")
-            
+
     # # Update employee in DB
     # def updateEmployeeData(self):
     #     employee_id = self.ui.comboBoxEditEmployee.currentData()
@@ -227,7 +300,8 @@ class MainWindow(QMainWindow):
         self.employee_id = None  # Initialize employee_id
         self.schul_id = None # Initialize t_id
         self.fileName = None 
-
+        self.document = None
+        self.certificateAddress = None
         # Initial check to set the correct state of the button when the app starts
         self.checkAllValidations()
 
@@ -280,6 +354,12 @@ class MainWindow(QMainWindow):
         self.ui.bCertificateImage.clicked.connect(self.getTheFileAddress)
         # Store the employee's training
         self.ui.bStoreEmpCerFile.clicked.connect(self.storeEmpCertificate)
+
+        # bearbeiten on registered certificate for a employee
+        self.ui.bEditCertificate.clicked.connect(self.populateCerEmpfields)
+
+
+        self.populateComboBoxCertifictes()
     # End Of INIT-------------------------
 
         
@@ -295,6 +375,7 @@ class MainWindow(QMainWindow):
                     e_id, f_name, l_name = row
                     self.ui.comboBoxEditEmployee.addItem(f_name +" " + l_name, e_id)
                     self.ui.comboBoxEmpCertificateTab.addItem(f_name +" " + l_name, e_id)
+                    self.ui.comboBoxEmployeeMain.addItem(f_name +" " + l_name, e_id)
             except Exception as e:
                 print(f"An error occurred while fetching employees: {e}")
             finally:
@@ -302,7 +383,32 @@ class MainWindow(QMainWindow):
                 conn.close()
         else:
             print("Failed to connect to the database")  
-        
+
+    # Populate combobox of the frame in the the certificate(Dokumente) tab    
+    def populateComboBoxCertifictes(self):
+        conn=connect_to_db()
+
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                cursor.execute("SELECT c_id, e_id, s_id FROM certificate")
+                for row in cursor.fetchall():
+                    cer_id, emp_id, schul_id = row
+                    cursor.execute("SELECT f_name, l_name From employees WHERE e_id = %s", (emp_id,))
+                    emp_row = cursor.fetchone()
+                    empName = f"{emp_row[0]} {emp_row[1]}"  # Assuming f_name is emp_row[0] and l_name is emp_row[1]
+                    cursor.execute("SELECT s_name From schulung WHERE s_id = %s", (schul_id,))
+                    schul_row = cursor.fetchone()
+                    schulName = schul_row[0]  # Assuming s_name is schul_row[0]
+                    self.ui.comboBoxEditCertificate.addItem(empName + " -> " + schulName, cer_id)
+                    
+            except Exception as e:
+                print(f"An error occurred while fetching certificates: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            print("Failed to connect to the database")
 
     # Get the data of employee from the fields and store or update the employee data       
     def StoringNewEmployee(self):

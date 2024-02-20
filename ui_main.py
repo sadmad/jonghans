@@ -140,6 +140,7 @@ class Ui_MainWindow(object):
         self.dateExpireCertificateSearch.setObjectName(u"dateExpireCertificateSearch")
         self.dateExpireCertificateSearch.setDate(QDate.currentDate())
         self.dateExpireCertificateSearch.setGeometry(QRect(30, 55, 231, 31))
+        self.dateExpireCertificateSearch.setDisplayFormat("dd MMM yyyy") 
         self.dateExpireCertificateSearch.setStyleSheet(cal)
 
        
@@ -254,6 +255,7 @@ class Ui_MainWindow(object):
         self.dateEditNeuerMitarbeiter.setObjectName(u"dateEditNeuerMitarbeiter")
         self.dateEditNeuerMitarbeiter.setDate(QDate.currentDate())
         self.dateEditNeuerMitarbeiter.setGeometry(QRect(40, 278, 241, 41))
+        self.dateEditNeuerMitarbeiter.setDisplayFormat("dd MMM yyyy") 
         #QLocale.setDefault(QLocale(QLocale.German, QLocale.Germany))
         self.dateEditNeuerMitarbeiter.setStyleSheet(cal)
         
@@ -328,7 +330,7 @@ class Ui_MainWindow(object):
         # Button new training
         self.bNewTrainingStore = QPushButton(self.framNewTraining)
         self.bNewTrainingStore.setObjectName(u"bNewTrainingStore")
-        self.bNewTrainingStore.setGeometry(QRect(210, 360, 221, 51))
+        self.bNewTrainingStore.setGeometry(QRect(210, 365, 221, 51))
         self.bNewTrainingStore.setCursor(Qt.PointingHandCursor)
         self.bNewTrainingStore.setStyleSheet(stylesheets)
         
@@ -367,7 +369,7 @@ class Ui_MainWindow(object):
 
         self.frameCertificate = QFrame(self.add_certificate)
         self.frameCertificate.setObjectName(u"frameCertificate")
-        self.frameCertificate.setGeometry(QRect(0, 0, 651, 601))
+        self.frameCertificate.setGeometry(QRect(0, 0, 651, 621))
         self.frameCertificate.setStyleSheet(u"background-color:  #DFF1FA;\n""")
         self.frameCertificate.setFrameShape(QFrame.StyledPanel)
         self.frameCertificate.setFrameShadow(QFrame.Raised)
@@ -399,57 +401,59 @@ class Ui_MainWindow(object):
         self.label_56.setStyleSheet(u"color: rgb(34, 51, 59);")
         self.label_57 = QLabel(self.frameCertificate)
         self.label_57.setObjectName(u"label_57")
-        self.label_57.setGeometry(QRect(50, 360, 131, 20))
+        self.label_57.setGeometry(QRect(50, 345, 131, 20))
         self.label_57.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
 
         # Button upload an certificate Image
         self.bCertificateImage = QPushButton(self.frameCertificate)
         self.bCertificateImage.setObjectName(u"bCertificateImage")
-        self.bCertificateImage.setGeometry(QRect(350, 320, 151, 41))
+        self.bCertificateImage.setGeometry(QRect(350, 330, 151, 41))
         self.bCertificateImage.setCursor(Qt.PointingHandCursor)
         self.bCertificateImage.setStyleSheet(stylesheets)
 
         # Button Save the certificate and connect the emplooyee and a schulung
         self.bStoreEmpCerFile = QPushButton(self.frameCertificate)
         self.bStoreEmpCerFile.setObjectName(u"bStoreEmpCerFile")
-        self.bStoreEmpCerFile.setGeometry(QRect(350, 380, 151, 41))
+        self.bStoreEmpCerFile.setGeometry(QRect(200, 400, 250, 41))
         self.bStoreEmpCerFile.setCursor(Qt.PointingHandCursor)
         self.bStoreEmpCerFile.setStyleSheet(stylesheets)
         
         self.frame_16 = QFrame(self.frameCertificate)
         self.frame_16.setObjectName(u"frame_16")
-        self.frame_16.setGeometry(QRect(50, 420, 531, 141))
+        self.frame_16.setGeometry(QRect(40, 448, 531, 100))
         self.frame_16.setFrameShape(QFrame.StyledPanel)
         self.frame_16.setFrameShadow(QFrame.Raised)
 
         # Button edit a liked certificate to a employee
         self.bEditCertificate = QPushButton(self.frame_16)
         self.bEditCertificate.setObjectName(u"bEditCertificate")
-        self.bEditCertificate.setGeometry(QRect(300, 50, 151, 41))
+        self.bEditCertificate.setGeometry(QRect(380, 33, 151, 41))
         self.bEditCertificate.setCursor(Qt.PointingHandCursor)
         self.bEditCertificate.setStyleSheet(stylesheets)
 
         self.editDok = QLabel(self.frame_16)
         self.editDok.setObjectName(u"editDok")
-        self.editDok.setGeometry(QRect(40, 20, 251, 20))
+        self.editDok.setGeometry(QRect(0, 10, 251, 20))
         self.editDok.setStyleSheet(u"color: rgb(34, 51, 59);\n""background-color: #DFF1FA")
         self.editDok.setText("Dokument Bearbeiten")
 
         self.comboBoxEditCertificate = QComboBox(self.frame_16)
         self.comboBoxEditCertificate.setObjectName(u"comboBoxEditCertificate")
-        self.comboBoxEditCertificate.setGeometry(QRect(40, 60, 221, 31))
+        self.comboBoxEditCertificate.setGeometry(QRect(0, 40, 350, 31))
         self.comboBoxEditCertificate.setStyleSheet(combo)
 
         self.dateCertificateTab = QDateEdit(self.frameCertificate, calendarPopup=True)
         self.dateCertificateTab.setObjectName(u"dateCertificateTab")
         self.dateCertificateTab.setDate(QDate.currentDate())
         self.dateCertificateTab.setGeometry(QRect(310, 210, 231, 31))
+        self.dateCertificateTab.setDisplayFormat("dd MMM yyyy") 
         self.dateCertificateTab.setStyleSheet(cal)
 
         self.expierDateCertificateTab = QDateEdit(self.frameCertificate, calendarPopup=True)
         self.expierDateCertificateTab.setObjectName(u"expierDateCertificateTab")
         self.expierDateCertificateTab.setDate(QDate.currentDate())
         self.expierDateCertificateTab.setGeometry(QRect(310, 280, 231, 31))
+        self.expierDateCertificateTab.setDisplayFormat("dd MMM yyyy") 
         self.expierDateCertificateTab.setStyleSheet(cal)
         
         self.textEdit = QTextEdit(self.centralwidget)
