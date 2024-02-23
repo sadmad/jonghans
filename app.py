@@ -7,8 +7,7 @@ from PySide2.QtGui import QIcon, QFont, QScreen, QRegExpValidator
 from ui_main import Ui_MainWindow
 from PySide2.QtCore import QRegExp, QDate  # Use PyQt5.QtCore if you're using PyQt5
 from newMitarbeiterValidator import *
-
-
+from reportDialog import ReportDialog
 
 
 # Validator's regex variables
@@ -82,11 +81,11 @@ class MainWindow(QMainWindow):
                         WHERE certificate.c_id = %s;
                         """
                 cursor.execute(query, (id,))
-                certifucateData = cursor.fetchall()
+                certificateData = cursor.fetchall()
 
-                if certifucateData:
+                if certificateData:
                     # Assuming certificateData[0] contains the data tuple
-                    data = certifucateData[0]
+                    data = certificateData[0]
                     print(data)
                     # Example of setting data to UI elements
                     # Set employee name combining first name and last name
@@ -135,6 +134,7 @@ class MainWindow(QMainWindow):
             
         else:
             print("Failed to connect to the database")
+
     # New employee button activation---------------------
     def checkAllValidations(self):
         # Assume all fields have validators and use hasAcceptableInput to check validity
@@ -184,23 +184,25 @@ class MainWindow(QMainWindow):
         try:
             options = QFileDialog.Options()
             # Correct usage of QFileDialog to open a file dialog
-            self.fileName, _ = QFileDialog.getOpenFileName(self, "Zertifikatsdatei auswählen", "",
+            self.certificateFilePath, _ = QFileDialog.getOpenFileName(self, "Zertifikatsdatei auswählen", "",
                                                   "PDF Files (*.pdf);;Image Files (*.jpg *.jpeg *.png)", options=options)
             
         except Exception as e:
-            print(self.fileName)
+            print(self.certificateFilePath)
     
-    # Link the emp and certifikate and store the certificate file in the folder
+    # Link the emp and certificate and store the certificate file in a folder
     def storeEmpCertificate(self):
         eId = self.ui.comboBoxEmpCertificateTab.currentData() 
         sId = self.ui.comboBoxTrainingCertificateTab.currentData()
         dateOfIssue = self.ui.dateCertificateTab.date().toPython()
         expiration = self.ui.expierDateCertificateTab.date().toPython()
         # Extract employee name from the form
-        employee_name = self.ui.comboBoxEmpCertificateTab.currentText()
-       
-        if self.fileName is not None:
-            # Check if the file is updated we need to delete the old file
+        employeeName = self.ui.comboBoxEmpCertificateTab.currentText()
+        trainingName = getTheTrainingNameById(sId)
+        # Formatting the expiration date
+        expirationStr = expiration.strftime("%Y-%m-%d")  # Convert expiration date to string
+        if self.certificateFilePath is not None: # If The certificateFilePath is set(storing a file)
+            # Check if the file is updated and then we need to delete the old file
             if self.certificateAddress is not None:
                 # Check if the file exists before attempting to delete
                 if os.path.exists(self.certificateAddress):
@@ -213,14 +215,21 @@ class MainWindow(QMainWindow):
                     print("Old certificate file does not exist.")
 
             # Define the directory path based on the employee's name
-            directory_path = os.path.join('Dokumente', employee_name)
+            directoryPath = os.path.join('Dokumente', employeeName)
+            # baseName is the name of the file and fileExtension is the format like PDF
+            baseName, fileExtension = os.path.splitext(os.path.basename(self.certificateFilePath))
+            # make the new baseName for the file
+            newFileName = f"{trainingName}_Expires_{expirationStr}{fileExtension}"
             # Create the directory if it does not exist
-            if not os.path.exists(directory_path):
-                os.makedirs(directory_path)
+            if not os.path.exists(directoryPath):
+                os.makedirs(directoryPath)
+            # New fileName
+            newFilePath = os.path.join(directoryPath, newFileName)
             # Copy the file to the new directory
-            shutil.copy(self.fileName, directory_path)
+            shutil.copy(self.certificateFilePath, newFilePath)
             # Generate the full path of the new file
-            new_file_path = os.path.join(directory_path, os.path.basename(self.fileName))
+            
+            new_file_path = newFilePath
         else:
             new_file_path = self.certificateAddress
         conn = connect_to_db()
@@ -235,7 +244,7 @@ class MainWindow(QMainWindow):
                     cursor.execute(query, (eId, sId, dateOfIssue, expiration, new_file_path ))
                     conn.commit()
         
-                    # Display  a success message in the message box
+                    # Display a success message in the message box
                     self.ui.updateSuccessMsg.exec_()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                 except Exception as e:
                     print(f"Error storing the certificate for the employee data: {e}")
@@ -299,7 +308,7 @@ class MainWindow(QMainWindow):
         
         self.employee_id = None  # Initialize employee_id
         self.schul_id = None # Initialize t_id
-        self.fileName = None 
+        self.certificateFilePath = None 
         self.document = None
         self.certificateAddress = None
         # Initial check to set the correct state of the button when the app starts
@@ -335,7 +344,8 @@ class MainWindow(QMainWindow):
         self.ui.newTrainingDuration.textChanged.connect(lambda: self.updateFieldValidationFeedbackT(self.ui.newTrainingDuration))
         mainValidator(self.ui.newTrainingDuration, onlyNumValidation)
         #----------------------------
-        
+        # Suchen for certificates of an employee 
+        self.ui.bSearchEmployeeCertificate.clicked.connect(self.openReportDialog)
         #submit new employee to store
         self.ui.bStoreNewEmployee.clicked.connect(self.StoringNewEmployee)
         
@@ -536,7 +546,42 @@ class MainWindow(QMainWindow):
         pass
 
     #----------------------------------
+    
+    # Get the certifictes by the employee name
+    def openReportDialog(self):
+        certificateData = None # Initialize the certificates list
+        employeeId = self.ui.comboBoxEmployeeMain.currentData()
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                query = """SELECT
+                            e.f_name,  -- from the 'employee' table, alias 'e'
+                            e.l_name,  -- from the 'employee' table, alias 'e'
+                            s.s_name,  -- from the 'schulung' table, alias 's'
+                            c.date_of_issue,         -- from the 'certificate' table, alias 'c'
+                            c.date_of_expiration,    -- from the 'certificate' table, alias 'c'
+                            c.certificate_image_path -- from the 'certificate' table, alias 'c'
+                           FROM
+                            certificate c  -- 'c' is the alias for 'certificate'
+                           JOIN employees e ON c.e_id = e.e_id  -- 'e' is the alias for 'employee'
+                           JOIN schulung s ON c.s_id = s.s_id  -- 's' is the alias for 'schulung'
+                           WHERE
+                            c.e_id = %s;  
+                        """
+                cursor.execute(query, (employeeId,))
+                certificateData = cursor.fetchall()
+            except Exception as e:
+                print(f"Error fetching employee details: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+                
+        else:
+            print("Failed to connect to the database")
 
+        dialog = ReportDialog(certificateData)
+        dialog.exec_()
 
 
 # Change the font size---------------------
@@ -561,6 +606,29 @@ def adjust_label_font_size(widget, font_size):
     for child in widget.findChildren(QLabel):
         child.setFont(font)
 #--------------------------------------------
+# Get Training Name by Id
+def getTheTrainingNameById(id):
+    trainName = None  # Initialize trainName to ensure it has a scope beyond the try-except block
+    conn = connect_to_db()
+    if conn is not None:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT s_name FROM schulung WHERE s_id = %s", (id,))
+            result = cursor.fetchone()
+            if result:
+                trainName = result[0]
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            conn.rollback()  # Rollback in case of error
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Failed to connect to the database")
+    return trainName
+
+# Assuming you have a function or a place in your code where you want to open the report dialog
+
 
 
 if __name__ == '__main__':
