@@ -6,24 +6,34 @@ from PySide2.QtCore import Qt, QPoint   # Add this line to import Qt
 import webbrowser
 import os
 import subprocess
+import pyfiglet
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Preformatted, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from datetime import datetime
+from reportlab.lib.units import inch, mm, cm
 
 class ReportDialog(QDialog):
-    def __init__(self, certificateData, parent=None):
+    data = None
+    def __init__(self, certificatesData, parent=None):
+        self.data = certificatesData
         super(ReportDialog, self).__init__(parent)
         self.layout = QVBoxLayout(self)
-
-        employee = certificateData[0][0] + " " + certificateData[0][1]
+        print(certificatesData)
+        employee = certificatesData[0][0] + " " + certificatesData[0][1]
         # Create and set the employee name label
         self.employeeNameLabel = QLabel(f"Certificates for {employee}")
         self.employeeNameLabel.setAlignment(Qt.AlignCenter)  # Optional: Center-align the text
         self.layout.addWidget(self.employeeNameLabel)
 
         # Initialize table with columns
-        self.table = QTableWidget(len(certificateData), 4)  # Adjust number of columns as needed
+        self.table = QTableWidget(len(certificatesData), 4)  # Adjust number of columns as needed
         self.table.setHorizontalHeaderLabels(["Certificate Name", "Issue Date", "Expiration Date", "View"])
         
         # Populate table rows with certificate data
-        for row, cert in enumerate(certificateData):
+        for row, cert in enumerate(certificatesData):
             self.table.setItem(row, 0, QTableWidgetItem(cert[2]))  # Assuming cert[1] is the certificate name
             self.table.setItem(row, 1, QTableWidgetItem(cert[3].strftime("%Y-%m-%d")))  # Assuming cert[3] is the issue date
             self.table.setItem(row, 2, QTableWidgetItem(cert[4].strftime("%Y-%m-%d")))  # Assuming cert[4] is the expiration date
@@ -50,66 +60,49 @@ class ReportDialog(QDialog):
             # For Linux: subprocess.call(('xdg-open', file_path))
         else:
             print("File does not exist:", file_path)
+    
+    # def header(canvas, doc):
+    #     logo_path = "qt-design/1.png"
+    #     canvas.saveState()
+    #     canvas.setFont('Helvetica', 20)
+    #     canvas.setFillColor(colors.white)  # Set text color
+    #     canvas.drawImage(logo_path, 40, 770, width=120, height=25)
+    #     canvas.drawString(72, 800, "Your Company Name")  # Use drawString for simplicity
+    #     canvas.drawString(72, 788, "Report Date: " + datetime.now().strftime("%Y-%m-%d"))
+    #     canvas.restoreState()
 
-    def printReport(self):
-
-        printer = QPrinter(QPrinter.HighResolution)
-        printer.setPageSize(QPrinter.A4)
-        printer.setOrientation(QPrinter.Portrait)
         
-        printDialog = QPrintDialog(printer, self)
-        
-        if printDialog.exec_() == QPrintDialog.Accepted:
-            painter = QPainter(printer)
-            offset = 200  # Start offset for printing
-            line_height = 120  # Adjust based on your needs
-          
-            # Print title
-            painter.drawText(QPoint(100, offset), "Certificates for Employee")
-            offset += line_height
-           
-            # Print column headers
-            painter.drawText(QPoint(100, offset), "Certificate Name")
-            painter.drawText(QPoint(300, offset), "Issue Date")
-            painter.drawText(QPoint(500, offset), "Expiration Date")
-            offset += line_height
+    # def printReport(self):
+    #     # Current date for the report
+    #     current_date = datetime.now().strftime("%Y-%m-%d")
+    #     styles = getSampleStyleSheet()
+    #     date_paragraph = Paragraph(current_date, styles['Normal'])
+    #     # Create PDF
+    #     pdf_file = "report.pdf"
 
-            # Iterate through table rows and print each cell
-            for row in range(self.table.rowCount()):
-                painter.drawText(QPoint(100, offset), self.table.item(row, 0).text())
-                painter.drawText(QPoint(300, offset), self.table.item(row, 1).text())
-                painter.drawText(QPoint(500, offset), self.table.item(row, 2).text())
-                offset += line_height
-
-            painter.end()
-    # def printSecondaryWindow(self):
-    #     # Step 1: Setup the Printer
         
-    #     printer = QPrinter(QPrinter.HighResolution)
-    #     printer.setPageSize(QPrinter.A4)  # Example: set to A4 size
-    #     printer.setOrientation(QPrinter.Portrait)  # Set orientation
+    #     # Prepare report data
+    #     reportData = [['Certificate', 'Issue Date', 'Expiration Date']] + [[row[2], row[3].strftime("%Y-%m-%d"), row[4].strftime("%Y-%m-%d")] for row in self.data]
        
-    #     # Step 2: Show Print Dialog
-    #     printDialog = QPrintDialog(printer)
+    #     # Create a SimpleDocTemplate object
+    #     doc = SimpleDocTemplate(pdf_file, pagesize=letter)
 
-    #     if printDialog.exec_() == QPrintDialog.Accepted:
-    #         # Step 3: Render the Window to the Printer
-    #         painter = QPainter(printer)
-    #         self.render(painter, QPoint(), QRegion(self.rect()), QWidget.DrawChildren)
-    #         painter.end()
-        # if printDialog.exec_() == QPrintDialog.Accepted:
-        #     painter = QPainter(printer)
-        #     painter.drawText(100, 100, "Hello, world!")
-        #     painter.end()
-        # def printTable(self):
-        #     printer = QPrinter(QPrinter.HighResolution)
-        #     dialog = QPrintDialog(printer, self)
 
-        #     if dialog.exec_() == QPrintDialog.Accepted:
-        #         painter = QPainter(printer)
-        #         # Start the painter
-        #         painter.begin(printer)
-        #         # Render the table specifically
-        #         self.table.render(painter)
-        #         # End the painter
-        #         painter.end()
+    #     # Define the table style
+    #     table_style = TableStyle([
+    #         ('BACKGROUND', (0,0), (-1,0), colors.grey),
+    #         ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
+    #         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+    #         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+    #         ('BOTTOMPADDING', (0,0), (-1,0), 12),
+    #         ('BACKGROUND', (0,1), (-1,-1), colors.beige),
+    #         ('GRID', (0,0), (-1,-1), 1, colors.black),
+    #     ])
+    #     # Create the table
+    #     table = Table(reportData, style=table_style)    
+    #     # Elements to add to the document
+    #     elements = [table]
+        
+
+    #     doc.build(elements, onFirstPage=ReportDialog.header, onLaterPages=ReportDialog.header)
+    #     print(f"Report saved as {pdf_file}")
