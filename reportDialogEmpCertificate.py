@@ -115,3 +115,23 @@ class ReportDialog(QDialog):
 
         doc.build(elements, onFirstPage=ReportDialog.header, onLaterPages=ReportDialog.header)
         print(f"Report saved as {pdf_file}")
+
+        # Define potential Adobe Reader paths
+        adobe_reader_paths = [
+            
+            "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe",
+
+            # Add any other paths where Adobe Reader might be installed
+        ]
+
+        # Find the first existing path to Adobe Reader
+        reader_path = next((path for path in adobe_reader_paths if os.path.exists(path)), None)
+
+        if reader_path:
+            try:
+                # Attempt to print the PDF file using Adobe Reader
+                subprocess.run([reader_path, "/p", pdf_file], check=True)
+            except subprocess.SubprocessError as e:
+                print(f"Error opening Adobe Reader: {e}")
+        else:
+            print("Adobe Reader executable not found. Please check the installation.")
