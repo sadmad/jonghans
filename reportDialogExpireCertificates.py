@@ -3,10 +3,7 @@ from PySide2.QtWidgets import (QApplication, QDialog, QVBoxLayout, QLabel, QTabl
 from PySide2.QtPrintSupport import QPrinter, QPrintDialog
 from PySide2.QtGui import QPainter, QRegion
 from PySide2.QtCore import Qt, QPoint   # Add this line to import Qt
-import webbrowser
-import os
-import subprocess
-import pyfiglet
+import webbrowser, os, subprocess, pyfiglet, pathlib, printfactory
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Preformatted, Image
@@ -14,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from datetime import datetime
 from reportlab.lib.units import inch, mm, cm
+
 
 class ReportDialogExpired(QDialog):
     data = None
@@ -107,3 +105,23 @@ class ReportDialogExpired(QDialog):
 
         doc.build(elements, onFirstPage=ReportDialogExpired.header, onLaterPages=ReportDialogExpired.header)
         print(f"Report saved as {pdf_file}")
+        
+        # Define potential Adobe Reader paths
+        adobe_reader_paths = [
+            
+            "C:\\Program Files\\Adobe\\Acrobat DC\\Acrobat\\Acrobat.exe",
+
+            # Add any other paths where Adobe Reader might be installed
+        ]
+
+        # Find the first existing path to Adobe Reader
+        reader_path = next((path for path in adobe_reader_paths if os.path.exists(path)), None)
+
+        if reader_path:
+            try:
+                # Attempt to print the PDF file using Adobe Reader
+                subprocess.run([reader_path, "/p", pdf_file], check=True)
+            except subprocess.SubprocessError as e:
+                print(f"Error opening Adobe Reader: {e}")
+        else:
+            print("Adobe Reader executable not found. Please check the installation.")
