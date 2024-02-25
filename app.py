@@ -594,7 +594,7 @@ class MainWindow(QMainWindow):
         if conn is not None:
             try:
                 cursor = conn.cursor()
-                query = """SELECT e.f_name, e.l_name, s.s_name, c.date_of_issue, c.date_of_expiration, c.certificate_image_path
+                query = """SELECT e.f_name, e.l_name, s.s_name, c.date_of_issue, c.date_of_expiration
                         FROM certificate c
                         JOIN employees e ON c.e_id = e.e_id
                         JOIN schulung s ON c.s_id = s.s_id
