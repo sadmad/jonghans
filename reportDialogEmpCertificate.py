@@ -61,48 +61,57 @@ class ReportDialog(QDialog):
         else:
             print("File does not exist:", file_path)
     
-    # def header(canvas, doc):
-    #     logo_path = "qt-design/1.png"
-    #     canvas.saveState()
-    #     canvas.setFont('Helvetica', 20)
-    #     canvas.setFillColor(colors.white)  # Set text color
-    #     canvas.drawImage(logo_path, 40, 770, width=120, height=25)
-    #     canvas.drawString(72, 800, "Your Company Name")  # Use drawString for simplicity
-    #     canvas.drawString(72, 788, "Report Date: " + datetime.now().strftime("%Y-%m-%d"))
-    #     canvas.restoreState()
+    def header(canvas, doc):
+        logo_path = "qt-design/1.png"
+        canvas.saveState()
+        canvas.setFont('Helvetica', 8)
+        canvas.setFillColor(colors.black)  # Set text color
+        canvas.drawImage(logo_path, 40, 740, width=120, height=25, mask='auto')  # Adjust as needed
+        #empName = f"Report of certificates {self.data[0][0]} {self.datap[0][1]}"
+        # Make sure there's enough space between the logo and the text
+        canvas.drawString(470, 755, "Schulung")  # Adjust Y coordinate so it's below the logo
+        canvas.drawString(470, 742, "Berichtsdatum: " + datetime.now().strftime("%Y-%m-%d"))
+        canvas.restoreState()
 
         
-    # def printReport(self):
-    #     # Current date for the report
-    #     current_date = datetime.now().strftime("%Y-%m-%d")
-    #     styles = getSampleStyleSheet()
-    #     date_paragraph = Paragraph(current_date, styles['Normal'])
-    #     # Create PDF
-    #     pdf_file = "report.pdf"
+    def printReport(self):
+        # Current date for the report
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        styles = getSampleStyleSheet()
+        date_paragraph = Paragraph(current_date, styles['Normal'])
+        # Create PDF
+        pdf_file = "report.pdf"
+        title_style = styles['Heading3']
+        title_style.alignment = 1       
+        name_paragraph = Paragraph(f"{self.data[0][0]} {self.data[0][1]}", title_style)
+        elements = [name_paragraph]
 
+        my_spacer = Spacer(1, 10*mm)  # Width is set to 1 since it's not relevant
+
+        # Assuming you have a list 'elements' to which you add your document's content
+        elements.append(my_spacer)    
+        # Prepare report data
+        reportData = [['Zertifikat', 'Ausstellungsdatum', 'Ablaufdatum']] + [[row[2], row[3].strftime("%Y-%m-%d"), row[4].strftime("%Y-%m-%d")] for row in self.data]
+
+        # Create a SimpleDocTemplate object
+        doc = SimpleDocTemplate(pdf_file, pagesize=letter)
+
+
+        # Define the table style
+        table_style = TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.grey),
+            ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+            ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+            ('BOTTOMPADDING', (0,0), (-1,0), 12),
+            ('BACKGROUND', (0,1), (-1,-1), colors.beige),
+            ('GRID', (0,0), (-1,-1), 1, colors.black),
+        ])
+        # Create the table
+        table = Table(reportData, style=table_style)    
+        # Elements to add to the document
+        elements.append(table)
         
-    #     # Prepare report data
-    #     reportData = [['Certificate', 'Issue Date', 'Expiration Date']] + [[row[2], row[3].strftime("%Y-%m-%d"), row[4].strftime("%Y-%m-%d")] for row in self.data]
-       
-    #     # Create a SimpleDocTemplate object
-    #     doc = SimpleDocTemplate(pdf_file, pagesize=letter)
 
-
-    #     # Define the table style
-    #     table_style = TableStyle([
-    #         ('BACKGROUND', (0,0), (-1,0), colors.grey),
-    #         ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
-    #         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-    #         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-    #         ('BOTTOMPADDING', (0,0), (-1,0), 12),
-    #         ('BACKGROUND', (0,1), (-1,-1), colors.beige),
-    #         ('GRID', (0,0), (-1,-1), 1, colors.black),
-    #     ])
-    #     # Create the table
-    #     table = Table(reportData, style=table_style)    
-    #     # Elements to add to the document
-    #     elements = [table]
-        
-
-    #     doc.build(elements, onFirstPage=ReportDialog.header, onLaterPages=ReportDialog.header)
-    #     print(f"Report saved as {pdf_file}")
+        doc.build(elements, onFirstPage=ReportDialog.header, onLaterPages=ReportDialog.header)
+        print(f"Report saved as {pdf_file}")

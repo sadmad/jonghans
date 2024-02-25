@@ -7,7 +7,8 @@ from PySide2.QtGui import QIcon, QFont, QScreen, QRegExpValidator
 from ui_main import Ui_MainWindow
 from PySide2.QtCore import QRegExp, QDate  # Use PyQt5.QtCore if you're using PyQt5
 from newMitarbeiterValidator import *
-from reportDialog import ReportDialog
+from reportDialogEmpCertificate import ReportDialog
+from reportDialogExpireCertificates import ReportDialogExpired
 
 
 # Validator's regex variables
@@ -346,6 +347,8 @@ class MainWindow(QMainWindow):
         #----------------------------
         # Suchen for certificates of an employee 
         self.ui.bSearchEmployeeCertificate.clicked.connect(self.openReportDialog)
+        # suchen for expired certificates
+        self.ui.bSearchExCertificateByDate.clicked.connect(self.openReportDialogExpired)
         #submit new employee to store
         self.ui.bStoreNewEmployee.clicked.connect(self.StoringNewEmployee)
         
@@ -581,6 +584,34 @@ class MainWindow(QMainWindow):
             print("Failed to connect to the database")
 
         dialog = ReportDialog(certificateData)
+        dialog.exec_()
+
+# Get the certifictes by the employee name
+    def openReportDialogExpired(self):
+        expiredCertificate = None # Initialize the expired certificates list
+        expireDate = self.ui.dateExpireCertificateSearch.date().toPython()
+        conn = connect_to_db()
+        if conn is not None:
+            try:
+                cursor = conn.cursor()
+                query = """SELECT e.f_name, e.l_name, s.s_name, c.date_of_issue, c.date_of_expiration, c.certificate_image_path
+                        FROM certificate c
+                        JOIN employees e ON c.e_id = e.e_id
+                        JOIN schulung s ON c.s_id = s.s_id
+                        WHERE c.date_of_expiration BETWEEN %s AND (%s + INTERVAL '3 MONTH')
+                        """
+                cursor.execute(query, (expireDate,expireDate,))
+                expiredCertificate = cursor.fetchall()
+            except Exception as e:
+                print(f"Error fetching employee details: {e}")
+            finally:
+                cursor.close()
+                conn.close()
+                
+        else:
+            print("Failed to connect to the database")
+
+        dialog = ReportDialogExpired(expiredCertificate)
         dialog.exec_()
 
 
